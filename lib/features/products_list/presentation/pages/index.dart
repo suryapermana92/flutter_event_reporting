@@ -1,10 +1,15 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:ui_hlb_ekyc_mobile/build_config.dart';
 import 'package:ui_hlb_ekyc_mobile/router.gr.dart';
 import '../widgets/product_list_item.dart';
 
 class ProductsListPage extends StatelessWidget {
+
+  ProductsListPage() {
+    print("Env :: ${BuildConfig.env}");
+  }
 
   void navigateToApplyProduct({String productType}) {
     Router.navigator.pushNamed(Router.applyProductPage, arguments: productType);
