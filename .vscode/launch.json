@@ -2,6 +2,14 @@
     "version": "0.2.0",
     "configurations": [
       {
+        "name": "Flutter",
+        "type": "dart",
+        "request": "launch",
+        // "args": ["--enable-software-rendering"]
+        // "flutterMode": "release", //debug //release 
+        "program": "lib/main_prod.dart"
+      },
+      {
         "name": "Flutter Dev",
         "type": "dart",
         "request": "launch",
