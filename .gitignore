@@ -30,6 +30,8 @@
 .pub/
 /build/
 ios/Flutter/.last_build_id
+ios/Runner.xcodeproj/xcshareddata/*
+ios/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme
 
 # Web related
 lib/generated_plugin_registrant.dart
