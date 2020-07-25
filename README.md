@@ -1,18 +1,16 @@
-# ui_hlb_ekyc_mobile
+# fluttersismic
 
-HLB EKYC MOBILE APP
+Flutter Sismic app
 
-## Project description
-HLB EKYC is a mobile application built with Flutter framework.
+## Getting Started
 
-### Prerequisites
-  * [Flutter](https://flutter.dev/docs/get-started/install)
-  * [Xcode (v11.1 and above)](https://developer.apple.com/xcode/)
-  * [Android Studio](https://developer.android.com/studio)
-  * [Visual Studio Code](https://code.visualstudio.com/download)
+This project is a starting point for a Flutter application.
 
-## RUN
- - Please use VSCode Run (Shift+Command+D)
-            (or)
- * ```DEV```: **flutter run -t lib/main_dev.dart**
- * ```PROD```: **flutter run -t lib/main_prod.dart**
+A few resources to get you started if this is your first Flutter project:
+
+- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+
+For help getting started with Flutter, view our
+[online documentation](https://flutter.dev/docs), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.

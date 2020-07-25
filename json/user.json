@@ -1,0 +1,27 @@
+{
+  "exp": 1595763367,
+  "nbf": 1595676967,
+  "iat": 1595676967,
+  "utente": {
+    "id": 1,
+    "username": "admin",
+    "password": "57386501364c8c141562062cfe32cd48",
+    "cognome": "Zaza",
+    "privilegi": "#AMMINISTRATORE#",
+    "nome": "Jad",
+    "email": "sample@sample.it",
+    "dt_creazione": "",
+    "id_operatore_creazione": 0,
+    "dt_salvataggio": "2020-06-14 19:22:34",
+    "id_operatore_salvataggio": 1,
+    "dt_cancellazione": null,
+    "id_operatore_cancellazione": null,
+    "privilegi_array": [
+      {
+        "codice": "AMMINISTRATORE",
+        "attivo": true
+      }
+    ]
+  },
+  "codicecliente": ""
+}
