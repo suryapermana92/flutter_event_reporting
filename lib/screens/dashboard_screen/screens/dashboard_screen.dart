@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttersismic/screens/dashboard_screen/bloc/bloc.dart';
 //import 'package:nodcredit/bloc/borrower_dashboard/bloc.dart';
 //import 'package:nodcredit/common/index.dart';
 import 'package:fluttersismic/styles/theme.dart' as Theme;
 import 'package:fluttersismic/styles/theme.dart';
+import 'package:fluttersismic/utils/route_generator.dart';
 import 'package:fluttersismic/widgets/circular_slider/sleek_circular_slider.dart';
 import 'package:fluttersismic/widgets/index.dart';
 
@@ -244,13 +246,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       color: ThemeColors.lightBlueSolid,
                                       borderRadius:
                                           BorderRadius.all(Radius.circular(8))),
-                                  child: Center(
-                                    child: Image.asset(
-                                        'assets/drawable-xxxhdpi/bank_blue.png',
-                                        width: 20,
-                                        height: 20,
-                                        fit: BoxFit.fill),
-                                  ),
+                                  child: Center(child: SizedBox()
+//                                    Image.asset(
+//                                        'assets/drawable-xxxhdpi/bank_blue.png',
+//                                        width: 20,
+//                                        height: 20,
+//                                        fit: BoxFit.fill),
+                                      ),
                                 )
                               ],
                             ),
@@ -302,13 +304,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       color: ThemeColors.lightBlueSolid,
                                       borderRadius:
                                           BorderRadius.all(Radius.circular(8))),
-                                  child: Center(
-                                    child: Image.asset(
-                                      'assets/drawable-xxxhdpi/employment_blue.png',
-                                      width: 20,
-                                      height: 20,
-                                    ),
-                                  ),
+                                  child: Center(child: SizedBox()
+//                                    Image.asset(
+//                                      'assets/drawable-xxxhdpi/employment_blue.png',
+//                                      width: 20,
+//                                      height: 20,
+//                                    ),
+                                      ),
                                 )
                               ],
                             ),
@@ -360,12 +362,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       color: ThemeColors.lightBlueSolid,
                                       borderRadius:
                                           BorderRadius.all(Radius.circular(8))),
-                                  child: Center(
-                                    child: Image.asset(
-                                        'assets/drawable-xxxhdpi/card_blue.png',
-                                        width: 20,
-                                        height: 20),
-                                  ),
+                                  child: Center(child: SizedBox()
+//                                    Image.asset(
+//                                        'assets/drawable-xxxhdpi/card_blue.png',
+//                                        width: 20,
+//                                        height: 20),
+                                      ),
                                 )
                               ],
                             ),
@@ -516,12 +518,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     color: Colors.white,
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(8))),
-                                child: Center(
-                                  child: Image.asset(
-                                      'assets/drawable-xxxhdpi/score_factors_blue.png',
-                                      width: 20,
-                                      height: 20),
-                                ),
+                                child: Center(child: SizedBox()
+//                                  Image.asset(
+//                                      'assets/drawable-xxxhdpi/score_factors_blue.png',
+//                                      width: 20,
+//                                      height: 20),
+                                    ),
                               ),
                               SizedBox(
                                 width: 10,
@@ -603,12 +605,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     color: Colors.white,
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(8))),
-                                child: Center(
-                                  child: Image.asset(
-                                      'assets/drawable-xxxhdpi/where_i_stand_blue.png',
-                                      width: 20,
-                                      height: 20),
-                                ),
+                                child: Center(child: SizedBox()
+//                                  Image.asset(
+//                                      'assets/drawable-xxxhdpi/where_i_stand_blue.png',
+//                                      width: 20,
+//                                      height: 20),
+                                    ),
                               ),
                               SizedBox(
                                 width: 10,
@@ -712,11 +714,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(8))),
                                 child: Center(
-                                  child: Image.asset(
-                                      'assets/drawable-xxxhdpi/improve_blue.png',
-                                      width: 13,
-                                      height: 13),
-                                ),
+                                    child:
+                                        SizedBox() //                                  Image.asset(
+//                                      'assets/drawable-xxxhdpi/improve_blue.png',
+//                                      width: 13,
+//                                      height: 13),
+                                    ),
                               ),
                               SizedBox(
                                 width: 10,
@@ -835,13 +838,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    DashboardScreenBloc dashboardScreenBloc =
+        BlocProvider.of<DashboardScreenBloc>(context);
+    dashboardScreenBloc.add(GetDashboardResponse());
+
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       key: _scaffoldKey,
-      appBar:
-//          MainAppBar(context, 'Dashboard', false, _scaffoldKey)
-          AppBarComponent(
+      appBar: AppBarComponent(
         context: context,
         goBack: false,
         scaffoldKey: _scaffoldKey,
@@ -853,353 +858,386 @@ class _DashboardScreenState extends State<DashboardScreen> {
         child: Container(
           height: double.infinity,
           color: ThemeColors.backgroundColor,
-          child: SingleChildScrollView(
-            controller: _scrollController,
-            child: Stack(
-              children: <Widget>[
-                AnimatedPositioned(
-                  duration: _duration,
-                  curve: Curves.easeInOut,
-                  top: isExpanded ? 285 : 100,
-                  left: 20,
-                  child: AnimatedOpacity(
-                    duration: _opacityDuration,
-                    opacity: isExpanded ? 1 : 0,
-                    child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        width: screenWidth - 40,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(16)),
-                            color: ThemeColors.lightBlueSolid),
-                        child: DashboardItems(selectedInfoIndex)),
-                  ),
-                ),
-                Positioned(
-                  top: 20,
-                  left: 20,
-                  child: GestureDetector(
-                    onTap: () {
-                      print('tap container');
-                      _scrollController.animateTo(0.0,
-                          duration: _duration, curve: Curves.easeInOut);
-
-                      setState(() {
-                        isExpanded = !isExpanded;
-                        selectedInfoIndex = -1;
-                      });
-                    },
-                    child: AnimatedContainer(
-                      padding: EdgeInsets.all(10),
-                      width: isExpanded
-                          ? MediaQuery.of(context).size.width - 40
-                          : 103,
-                      height: isExpanded ? 240 : 108,
-                      duration: _duration,
-                      curve: Curves.easeInOut,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(16)),
-                          boxShadow: [
-                            BoxShadow(
-                                color: ThemeColors.lightBlue10,
-                                offset: Offset(0, 3),
-                                spreadRadius: 0,
-                                blurRadius: 3)
-                          ]),
-                      child: Stack(
-                        children: <Widget>[
-                          Align(
-                            alignment: Alignment(0, 0.25),
+          child: BlocBuilder<DashboardScreenBloc, DashboardScreenState>(
+              bloc: dashboardScreenBloc,
+              builder: (context, state) {
+                if (state is DashboardLoading) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (state is GetDashboardResponseSuccess) {
+                  return SingleChildScrollView(
+                    controller: _scrollController,
+                    child: Stack(
+                      children: <Widget>[
+                        AnimatedPositioned(
+                          duration: _duration,
+                          curve: Curves.easeInOut,
+                          top: isExpanded ? 285 : 100,
+                          left: 20,
+                          child: AnimatedOpacity(
+                            duration: _opacityDuration,
+                            opacity: isExpanded ? 1 : 0,
                             child: Container(
-                              height: 120,
-                              width: 100,
-//                                color: Colors.yellow,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
+                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                width: screenWidth - 40,
+                                decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(16)),
+                                    color: ThemeColors.lightBlueSolid),
+                                child: DashboardItems(selectedInfoIndex)),
+                          ),
+                        ),
+                        Positioned(
+                          top: 20,
+                          left: 20,
+                          child: GestureDetector(
+                            onTap: () {
+                              print('tap container');
+                              _scrollController.animateTo(0.0,
+                                  duration: _duration, curve: Curves.easeInOut);
+
+                              setState(() {
+                                isExpanded = !isExpanded;
+                                selectedInfoIndex = -1;
+                              });
+                            },
+                            child: AnimatedContainer(
+                              padding: EdgeInsets.all(10),
+                              width: isExpanded
+                                  ? MediaQuery.of(context).size.width - 40
+                                  : 103,
+                              height: isExpanded ? 240 : 108,
+                              duration: _duration,
+                              curve: Curves.easeInOut,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(16)),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: ThemeColors.lightBlue10,
+                                        offset: Offset(0, 3),
+                                        spreadRadius: 0,
+                                        blurRadius: 3)
+                                  ]),
+                              child: Stack(
                                 children: <Widget>[
-                                  AnimatedDefaultTextStyle(
-                                    style: isExpanded
-                                        ? TextStyle(
-                                            color: ThemeColors.darkText,
-                                            fontSize: 33,
-                                            fontFamily: 'SourceSansPro')
-                                        : TextStyle(
-                                            color: ThemeColors.darkText,
-                                            fontSize: 45,
-                                            fontFamily: 'SourceSansPro'),
-                                    duration: _duration,
-                                    child: Text(
-                                      "750",
+                                  Align(
+                                    alignment: Alignment(0, 0.25),
+                                    child: Container(
+                                      height: 120,
+                                      width: 100,
+//                                color: Colors.yellow,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          AnimatedDefaultTextStyle(
+                                            style: isExpanded
+                                                ? TextStyle(
+                                                    color: ThemeColors.darkText,
+                                                    fontSize: 33,
+                                                    fontFamily: 'SourceSansPro')
+                                                : TextStyle(
+                                                    color: ThemeColors.darkText,
+                                                    fontSize: 45,
+                                                    fontFamily:
+                                                        'SourceSansPro'),
+                                            duration: _duration,
+                                            child: Text(state
+                                                .response.data.user.scoresAmount
+                                                .toString()),
+                                          ),
+                                          AnimatedContainer(
+                                            duration: _duration,
+                                            height: isExpanded ? 15 : 0,
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              _scrollController.animateTo(0.0,
+                                                  duration: _duration,
+                                                  curve: Curves.easeInOut);
+
+                                              setState(() {
+                                                isExpanded = !isExpanded;
+                                                selectedInfoIndex = -1;
+                                              });
+                                            },
+                                            child: Container(
+                                              height: 22,
+                                              width: 84,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(10)),
+                                                  color: ThemeColors
+                                                      .lightBlueSolid),
+                                              child: Center(
+                                                  child: Text(
+                                                'NOD SCORE',
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    fontFamily: 'Roboto',
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                              )),
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                  AnimatedContainer(
+                                  AnimatedOpacity(
                                     duration: _duration,
-                                    height: isExpanded ? 15 : 0,
+                                    opacity: isExpanded ? 1 : 0,
+                                    child: Align(
+                                      alignment: Alignment(0, 0.3),
+                                      child: Container(
+                                        constraints: BoxConstraints(
+                                            maxHeight: 180, maxWidth: 250),
+                                        child: Stack(
+                                          children: <Widget>[
+                                            Align(
+                                              alignment: Alignment(0, 0.3),
+                                              child: Container(
+                                                child: SleekCircularSlider(
+                                                  min: 100,
+                                                  max: 900,
+                                                  initialValue: 750,
+                                                  appearance: CircularSliderAppearance(
+                                                      size: 150,
+                                                      startAngle: 180,
+                                                      angleRange: 180,
+                                                      customColors:
+                                                          CustomSliderColors(
+                                                              trackColor:
+                                                                  Colors.grey[
+                                                                      200],
+                                                              dotColor:
+                                                                  ThemeColors
+                                                                      .orangeMain,
+                                                              shadowColor: Colors
+                                                                  .transparent,
+                                                              progressBarColor:
+                                                                  ThemeColors
+                                                                      .orangeMain),
+                                                      customWidths:
+                                                          CustomSliderWidths(
+                                                              trackWidth: 3,
+                                                              progressBarWidth:
+                                                                  3,
+                                                              handlerSize: 4.5,
+                                                              shadowWidth: 0)),
+                                                  innerWidget: (double value) {
+                                                    // use your custom widget inside the slider (gets a slider value from the callback)
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                            Align(
+                                              alignment: Alignment(0, 0.2),
+                                              child: Container(
+                                                width: 160,
+                                                height: 20,
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: <Widget>[
+                                                    Text(
+                                                      '100',
+                                                      style: TextStyle(
+                                                          fontSize: 10,
+                                                          fontFamily:
+                                                              sourceSansPro),
+                                                    ),
+                                                    Text(
+                                                      '900',
+                                                      style: TextStyle(
+                                                          fontSize: 10,
+                                                          fontFamily:
+                                                              sourceSansPro),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      _scrollController.animateTo(0.0,
-                                          duration: _duration,
-                                          curve: Curves.easeInOut);
-
-                                      setState(() {
-                                        isExpanded = !isExpanded;
-                                        selectedInfoIndex = -1;
-                                      });
-                                    },
-                                    child: Container(
-                                      height: 22,
-                                      width: 84,
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(10)),
-                                          color: ThemeColors.lightBlueSolid),
-                                      child: Center(
-                                          child: Text(
-                                        'NOD SCORE',
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            fontFamily: 'Roboto',
-                                            fontWeight: FontWeight.w500),
+                                  AnimatedOpacity(
+                                      duration: _duration,
+                                      opacity: isExpanded ? 1 : 0,
+                                      child: Align(
+                                          alignment: Alignment.topRight,
+                                          child: Icon(
+                                            Icons.keyboard_arrow_up,
+                                            size: 30,
+                                          ))),
+                                  AnimatedOpacity(
+                                      duration: _duration,
+                                      opacity: isExpanded ? 1 : 0,
+                                      child: Align(
+                                        alignment: Alignment.bottomCenter,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(10.0),
+                                          child: RichText(
+                                              text: TextSpan(
+                                                  style: TextStyle(
+                                                      fontSize: 10,
+                                                      fontFamily: sourceSansPro,
+                                                      color:
+                                                          ThemeColors.darkText,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                  text: 'Updated: ',
+                                                  children: <TextSpan>[
+                                                TextSpan(
+                                                    text: '1st July, 2019',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.normal)),
+                                              ])),
+                                        ),
                                       )),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        AnimatedPositioned(
+                          duration: _duration,
+                          right: isExpanded ? -(screenWidth - 140) : 0,
+                          child: AnimatedOpacity(
+                            opacity: isExpanded ? 0 : 1,
+                            duration: _opacityDuration,
+                            child: Container(
+                              padding: EdgeInsets.only(left: 20, top: 20),
+                              child: Row(
+                                children: <Widget>[
+                                  SizedBox(
+                                    width: 120,
+                                  ),
+                                  Container(
+                                    height: 108,
+                                    width: screenWidth - 140,
+                                    padding: EdgeInsets.only(
+                                        top: 8,
+                                        left: 12.5,
+                                        bottom: 8,
+                                        right: 20),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.horizontal(
+                                            left: Radius.circular(10)),
+                                        color: ThemeColors.lightBlueSolid),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                            Text(
+                                              'Total Received',
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: ThemeColors.darkBlue,
+                                                  fontFamily: 'SourceSansPro'),
+                                            ),
+                                            Text(
+                                              '₦57,630.00',
+                                              style: TextStyle(
+                                                  fontFamily: 'SourceSansPro'),
+                                            ),
+                                          ],
+                                        ),
+                                        ListDivider(
+                                          height: 0.5,
+                                          margin: EdgeInsets.all(0),
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                            Text(
+                                              'Completed Loans',
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: ThemeColors.greenText,
+                                                  fontFamily: 'SourceSansPro'),
+                                            ),
+                                            Text(
+                                              '1',
+                                              style: TextStyle(
+                                                  fontFamily: 'SourceSansPro'),
+                                            ),
+                                          ],
+                                        ),
+                                        ListDivider(
+                                          height: 0.5,
+                                          margin: EdgeInsets.all(0),
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                            Text(
+                                              'Rejected Loans',
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: ThemeColors.redText,
+                                                  fontFamily: 'SourceSansPro'),
+                                            ),
+                                            Text(
+                                              '3',
+                                              style: TextStyle(
+                                                  fontFamily: 'SourceSansPro'),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
                                     ),
                                   )
                                 ],
                               ),
                             ),
                           ),
-                          AnimatedOpacity(
-                            duration: _duration,
-                            opacity: isExpanded ? 1 : 0,
-                            child: Align(
-                              alignment: Alignment(0, 0.3),
-                              child: Container(
-                                constraints: BoxConstraints(
-                                    maxHeight: 180, maxWidth: 250),
-                                child: Stack(
-                                  children: <Widget>[
-                                    Align(
-                                      alignment: Alignment(0, 0.3),
-                                      child: Container(
-                                        child: SleekCircularSlider(
-                                          min: 100,
-                                          max: 900,
-                                          initialValue: 750,
-                                          appearance: CircularSliderAppearance(
-                                              size: 150,
-                                              startAngle: 180,
-                                              angleRange: 180,
-                                              customColors: CustomSliderColors(
-                                                  trackColor: Colors.grey[200],
-                                                  dotColor:
-                                                      ThemeColors.orangeMain,
-                                                  shadowColor:
-                                                      Colors.transparent,
-                                                  progressBarColor:
-                                                      ThemeColors.orangeMain),
-                                              customWidths: CustomSliderWidths(
-                                                  trackWidth: 3,
-                                                  progressBarWidth: 3,
-                                                  handlerSize: 4.5,
-                                                  shadowWidth: 0)),
-                                          innerWidget: (double value) {
-                                            // use your custom widget inside the slider (gets a slider value from the callback)
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                    Align(
-                                      alignment: Alignment(0, 0.2),
-                                      child: Container(
-                                        width: 160,
-                                        height: 20,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: <Widget>[
-                                            Text(
-                                              '100',
-                                              style: TextStyle(
-                                                  fontSize: 10,
-                                                  fontFamily: sourceSansPro),
-                                            ),
-                                            Text(
-                                              '900',
-                                              style: TextStyle(
-                                                  fontSize: 10,
-                                                  fontFamily: sourceSansPro),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
+                        ),
+                        AnimatedPositioned(
+                          duration: _duration,
+                          curve: Curves.easeInOut,
+                          top: isExpanded ? screenHeight : 160,
+                          child: AnimatedOpacity(
+                              duration: _opacityDuration,
+                              opacity: isExpanded ? 0 : 1,
+                              child: AmountDueSection()),
+                        ),
+                        AnimatedPositioned(
+                          duration: _duration,
+                          curve: Curves.easeInOut,
+                          top: isExpanded ? screenHeight : 305,
+                          child: AnimatedOpacity(
+                            duration: _opacityDuration,
+                            opacity: isExpanded ? 0 : 1,
+                            child: CompleteVerificationSection(),
                           ),
-                          AnimatedOpacity(
-                              duration: _duration,
-                              opacity: isExpanded ? 1 : 0,
-                              child: Align(
-                                  alignment: Alignment.topRight,
-                                  child: Icon(
-                                    Icons.keyboard_arrow_up,
-                                    size: 30,
-                                  ))),
-                          AnimatedOpacity(
-                              duration: _duration,
-                              opacity: isExpanded ? 1 : 0,
-                              child: Align(
-                                alignment: Alignment.bottomCenter,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: RichText(
-                                      text: TextSpan(
-                                          style: TextStyle(
-                                              fontSize: 10,
-                                              fontFamily: sourceSansPro,
-                                              color: ThemeColors.darkText,
-                                              fontWeight: FontWeight.bold),
-                                          text: 'Updated: ',
-                                          children: <TextSpan>[
-                                        TextSpan(
-                                            text: '1st July, 2019',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.normal)),
-                                      ])),
-                                ),
-                              )),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                AnimatedPositioned(
-                  duration: _duration,
-                  right: isExpanded ? -(screenWidth - 140) : 0,
-                  child: AnimatedOpacity(
-                    opacity: isExpanded ? 0 : 1,
-                    duration: _opacityDuration,
-                    child: Container(
-                      padding: EdgeInsets.only(left: 20, top: 20),
-                      child: Row(
-                        children: <Widget>[
-                          SizedBox(
-                            width: 120,
+                        ),
+                        AnimatedPositioned(
+                          duration: _duration,
+                          curve: Curves.easeInOut,
+                          top: isExpanded ? screenHeight : 705,
+                          child: AnimatedOpacity(
+                            duration: _opacityDuration,
+                            opacity: isExpanded ? 0 : 1,
+                            child: TooltipSection(),
                           ),
-                          Container(
-                            height: 108,
-                            width: screenWidth - 140,
-                            padding: EdgeInsets.only(
-                                top: 8, left: 12.5, bottom: 8, right: 20),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.horizontal(
-                                    left: Radius.circular(10)),
-                                color: ThemeColors.lightBlueSolid),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    Text(
-                                      'Total Received',
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          color: ThemeColors.darkBlue,
-                                          fontFamily: 'SourceSansPro'),
-                                    ),
-                                    Text(
-                                      '₦57,630.00',
-                                      style: TextStyle(
-                                          fontFamily: 'SourceSansPro'),
-                                    ),
-                                  ],
-                                ),
-                                ListDivider(
-                                  height: 0.5,
-                                  margin: EdgeInsets.all(0),
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    Text(
-                                      'Completed Loans',
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          color: ThemeColors.greenText,
-                                          fontFamily: 'SourceSansPro'),
-                                    ),
-                                    Text(
-                                      '1',
-                                      style: TextStyle(
-                                          fontFamily: 'SourceSansPro'),
-                                    ),
-                                  ],
-                                ),
-                                ListDivider(
-                                  height: 0.5,
-                                  margin: EdgeInsets.all(0),
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    Text(
-                                      'Rejected Loans',
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          color: ThemeColors.redText,
-                                          fontFamily: 'SourceSansPro'),
-                                    ),
-                                    Text(
-                                      '3',
-                                      style: TextStyle(
-                                          fontFamily: 'SourceSansPro'),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                AnimatedPositioned(
-                  duration: _duration,
-                  curve: Curves.easeInOut,
-                  top: isExpanded ? screenHeight : 160,
-                  child: AnimatedOpacity(
-                      duration: _opacityDuration,
-                      opacity: isExpanded ? 0 : 1,
-                      child: AmountDueSection()),
-                ),
-                AnimatedPositioned(
-                  duration: _duration,
-                  curve: Curves.easeInOut,
-                  top: isExpanded ? screenHeight : 305,
-                  child: AnimatedOpacity(
-                    duration: _opacityDuration,
-                    opacity: isExpanded ? 0 : 1,
-                    child: CompleteVerificationSection(),
-                  ),
-                ),
-                AnimatedPositioned(
-                  duration: _duration,
-                  curve: Curves.easeInOut,
-                  top: isExpanded ? screenHeight : 705,
-                  child: AnimatedOpacity(
-                    duration: _opacityDuration,
-                    opacity: isExpanded ? 0 : 1,
-                    child: TooltipSection(),
-                  ),
-                ),
+                        ),
 //                  AnimatedPositioned(
 //                    duration: _duration,
 //                    curve: Curves.easeInOut,
@@ -1218,16 +1256,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
 //                          child: DashboardItems(selectedInfoIndex)),
 //                    ),
 //                  ),
-                isExpanded
-                    ? Container(
-                        height: 700,
-                      )
-                    : Container(
-                        height: (850.0),
-                      ),
-              ],
-            ),
-          ), //        color: ThemeColors.backgroundBlue,
+                        isExpanded
+                            ? Container(
+                                height: 700,
+                              )
+                            : Container(
+                                height: (850.0),
+                              ),
+                      ],
+                    ),
+                  );
+                }
+                return SizedBox();
+              }), //        color: ThemeColors.backgroundBlue,
         ),
       ),
     );
