@@ -33,6 +33,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   void initState() {
+    DashboardScreenBloc dashboardScreenBloc =
+        BlocProvider.of<DashboardScreenBloc>(context);
+    dashboardScreenBloc.add(GetDashboardResponse());
     super.initState();
   }
 
@@ -840,8 +843,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     DashboardScreenBloc dashboardScreenBloc =
         BlocProvider.of<DashboardScreenBloc>(context);
-    dashboardScreenBloc.add(GetDashboardResponse());
-
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
