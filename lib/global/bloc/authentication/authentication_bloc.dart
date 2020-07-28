@@ -19,7 +19,7 @@ class AuthenticationBloc
     yield AuthenticationLoading(); // to display splash screen
     try {
       await Future.delayed(Duration(milliseconds: 500)); // a simulated delay
-      final accessToken = await AuthenticationService.getCurrentUser();
+      final accessToken = await _authenticationService.getCurrentUser();
 
       if (accessToken != null) {
         yield AuthenticationAuthenticated(token: accessToken);
@@ -35,13 +35,13 @@ class AuthenticationBloc
   Stream<AuthenticationState> _mapUserLoggedInToState(
       UserLoggedIn event) async* {
     String accessToken = event.access_token;
-    await AuthenticationService.saveCurrentUser(accessToken);
+    await _authenticationService.saveCurrentUser(accessToken);
     yield AuthenticationAuthenticated(token: accessToken);
   }
 
   Stream<AuthenticationState> _mapUserLoggedOutToState(
       UserLoggedOut event) async* {
-    await AuthenticationService.signOut();
+    await _authenticationService.signOut();
     yield AuthenticationNotAuthenticated();
   }
 

@@ -15,7 +15,17 @@ import 'package:fluttersismic/screens/login_screen/models/login_request.dart';
 //import '../../services/services.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  LoginBloc() : super(LoginInitial());
+  final AuthenticationService _authenticationService;
+  final AuthenticationBloc _authenticationBloc;
+
+  LoginBloc(AuthenticationBloc authenticationBloc,
+      AuthenticationService authenticationService)
+      : assert(authenticationBloc != null),
+        assert(authenticationService != null),
+        _authenticationBloc = authenticationBloc,
+        _authenticationService = authenticationService,
+        super(LoginInitial());
+
   @override
   LoginState get initialState => LoginInitial();
 
@@ -30,7 +40,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       LoginInWithUserameAndPassword event) async* {
     yield LoginLoading();
     try {
-      final response = await AuthenticationService.signInWithEmailAndPassword(
+      final response = await _authenticationService.signInWithEmailAndPassword(
           LoginFormData(username: event.username, password: event.password));
       if (response != null) {
         if (response.statusCode == 200) {
@@ -39,7 +49,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           String access_token = token.token;
           print(response.body);
 //          yield LoginInitial();
-          authenticationBloc.add(UserLoggedIn(access_token: access_token));
+          _authenticationBloc.add(UserLoggedIn(access_token: access_token));
         } else {
           yield LoginFailure(
               responseMessage: 'Something very weird just happened');

@@ -1,15 +1,15 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttersismic/screens/login_screen/models/login_request.dart';
-import 'package:fluttersismic/screens/login_screen/repositories/login_service.dart';
+import 'package:fluttersismic/utils/constants.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 
 class AuthenticationService {
-  static var storage = new FlutterSecureStorage();
-  static Future<http.Response> signInWithEmailAndPassword(
+  var storage = new FlutterSecureStorage();
+  Future<http.Response> signInWithEmailAndPassword(
       LoginFormData loginFormData) async {
-    var url = "$api_base_url/1/users/login";
+    var url = "${Constants.api_base_url}/1/users/login";
     Map<String, dynamic> body = {
 //      "User ID": "qqq@qq.com",
       "username": '${loginFormData.username}',
@@ -30,7 +30,7 @@ class AuthenticationService {
     return response;
   }
 
-  static Future<String> getCurrentUser() async {
+  Future<String> getCurrentUser() async {
     var accessToken;
     await storage
         .read(key: "accessToken")
@@ -39,13 +39,13 @@ class AuthenticationService {
     return accessToken;
   }
 
-  static Future<String> saveCurrentUser(String accessToken) async {
+  Future<String> saveCurrentUser(String accessToken) async {
     await storage.write(key: "accessToken", value: accessToken);
 
     return accessToken;
   }
 
-  static Future<String> signOut() async {
+  Future<String> signOut() async {
     await storage.delete(key: "accessToken");
     print('access_token removed');
   }
