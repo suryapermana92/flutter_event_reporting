@@ -84,11 +84,11 @@ class _AppBarComponentState extends State<AppBarComponent> {
                   color: Colors.transparent,
                   height: 22,
                   width: 22,
-                  child: Center(
-                    child: new Image.asset(
-                        "assets/drawable-xxxhdpi/hamburger.png",
-                        fit: BoxFit.contain),
-                  ),
+                  child: Center(child: SizedBox()
+//                    new Image.asset(
+//                        "assets/drawable-xxxhdpi/hamburger.png",
+//                        fit: BoxFit.contain),
+                      ),
                 ),
               ),
             ),
@@ -104,12 +104,12 @@ class _AppBarComponentState extends State<AppBarComponent> {
                   height: 60,
                   width: 60,
 //          color: Colors.red,
-                  child: Center(
-                    child: new Image.asset(
-                        "assets/drawable-xxxhdpi/notifications_alert_edit.png",
-                        width: 50,
-                        height: 35),
-                  )),
+                  child: Center(child: SizedBox()
+//                    new Image.asset(
+//                        "assets/drawable-xxxhdpi/notifications_alert_edit.png",
+//                        width: 50,
+//                        height: 35),
+                      )),
             ),
           ),
         )
