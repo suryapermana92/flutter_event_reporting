@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttersismic/global/bloc/authentication/authentication_bloc.dart';
 import 'package:fluttersismic/global/services/auth.dart';
+import 'package:fluttersismic/screens/dashboard_screen/bloc/bloc.dart';
+import 'package:fluttersismic/screens/dashboard_screen/repositories/dashboard_service.dart';
 import 'package:fluttersismic/screens/login_screen/bloc/bloc.dart';
 import 'package:fluttersismic/utils/route_generator.dart';
 
@@ -79,11 +81,16 @@ class _MyHomePageState extends State<MyHomePage> {
     return MultiBlocProvider(
         providers: [
           BlocProvider<LoginBloc>(
-            create: (BuildContext context) => LoginBloc(),
+            create: (BuildContext context) =>
+                LoginBloc(authenticationBloc, authenticationService),
           ),
           BlocProvider<AuthenticationBloc>(
             create: (BuildContext context) =>
                 AuthenticationBloc(authenticationService),
+          ),
+          BlocProvider<DashboardScreenBloc>(
+            create: (BuildContext context) =>
+                DashboardScreenBloc(dashboardService),
           ),
         ],
         child: MaterialApp(

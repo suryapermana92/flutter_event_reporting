@@ -45,36 +45,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
     _preLogin() {
       authenticationBloc.add(AppLoaded());
-//      Auth().getCurrentUser().then((user) async {
-//        if (_userId == null) {
-//          bool hasShowTutorial = await _readHasShowTutorial();
-////          print(hasShowTutorial);
-//          _disableAutoSignout();
-//
-//          if (hasShowTutorial == true) {
-//            Navigator.of(context).pushNamed(loginRoute);
-//          } else {
-//            Navigator.of(context).pushNamed(tutorialRoute);
-//          }
-//        } else {
-//          bool hasSignOutAfterReinstall = await _readHasSignoutAfterReinstall();
-////          print("hasSignOutAfterReinstall $hasSignOutAfterReinstall");
-//          if (hasSignOutAfterReinstall == false) {
-//            _auth.signOut().then((user) async {
-//              _disableAutoSignout();
-//              bool hasShowTutorial = await _readHasShowTutorial();
-////              print(hasShowTutorial);
-//              if (hasShowTutorial == true) {
-//                Navigator.of(context).pushNamed(loginRoute);
-//              } else {
-//                Navigator.of(context).pushNamed(tutorialRoute);
-//              }
-//            });
-//          } else {
-//            Navigator.of(context).pushNamed(navigationRoute);
-//          }
-//        }
-//      });
     }
 
     Future.delayed(Duration(seconds: 3), () async {
