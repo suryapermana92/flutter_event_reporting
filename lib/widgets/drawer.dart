@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fluttersismic/global/services/auth.dart';
 import 'package:fluttersismic/styles/theme.dart';
+import 'package:fluttersismic/utils/route_generator.dart';
 
 import 'index.dart';
 
@@ -516,7 +518,8 @@ Widget BorrowerDrawerWidget(context) {
                   color: ThemeColors.lightBlue5,
                   child: InkWell(
                     onTap: () {
-//                      Navigator.of(context).pushNamed(investorDashboardScreen);
+                      authenticationService.signOut();
+                      Navigator.of(context).pushReplacementNamed(loginScreen);
                     },
                     child: Container(
                       padding: EdgeInsets.symmetric(vertical: 5),
@@ -537,12 +540,12 @@ Widget BorrowerDrawerWidget(context) {
                             )),
                         title: RichText(
                           text: TextSpan(
-                              text: 'Invest with ',
+                              text: '',
                               style: TextStyle(
                                   fontSize: 14, color: ThemeColors.darkText),
                               children: <TextSpan>[
                                 TextSpan(
-                                    text: 'Nodcredit',
+                                    text: 'Log out',
                                     style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,
@@ -555,47 +558,47 @@ Widget BorrowerDrawerWidget(context) {
                 ),
               ],
             ),
-            Column(
-              children: <Widget>[
-                ListDivider(),
-                SizedBox(
-                  height: 10,
-                ),
-                ListTile(
-                  onTap: () {
-//                            Navigator.of(context)
-//                                .popUntil(ModalRoute.withName(loginScreen));
-                  },
-                  title: Container(
-                      padding: EdgeInsets.symmetric(vertical: 5),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            'Nodcredit V2.1',
-                            textAlign: TextAlign.center,
-                          ),
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 3),
-                            decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(8)),
-                                color: ThemeColors.greenActive),
-                            child: Text(
-                              'active',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 10),
-                            ),
-                          )
-                        ],
-                      )),
-                ),
-                SizedBox(
-                  height: 30,
-                )
-              ],
-            )
+//            Column(
+//              children: <Widget>[
+//                ListDivider(),
+//                SizedBox(
+//                  height: 10,
+//                ),
+//                ListTile(
+//                  onTap: () {
+////                            Navigator.of(context)
+////                                .popUntil(ModalRoute.withName(loginScreen));
+//                  },
+//                  title: Container(
+//                      padding: EdgeInsets.symmetric(vertical: 5),
+//                      child: Row(
+//                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                        children: <Widget>[
+//                          Text(
+//                            'Nodcredit V2.1',
+//                            textAlign: TextAlign.center,
+//                          ),
+//                          Container(
+//                            padding: EdgeInsets.symmetric(
+//                                horizontal: 10, vertical: 3),
+//                            decoration: BoxDecoration(
+//                                borderRadius:
+//                                    BorderRadius.all(Radius.circular(8)),
+//                                color: ThemeColors.greenActive),
+//                            child: Text(
+//                              'active',
+//                              style:
+//                                  TextStyle(color: Colors.white, fontSize: 10),
+//                            ),
+//                          )
+//                        ],
+//                      )),
+//                ),
+//                SizedBox(
+//                  height: 30,
+//                )
+//              ],
+//            )
           ],
         ),
       ),
