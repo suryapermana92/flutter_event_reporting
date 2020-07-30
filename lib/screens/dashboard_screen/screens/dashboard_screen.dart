@@ -81,29 +81,34 @@ class _DashboardScreenState extends State<DashboardScreen> {
         children: <Widget>[
           Column(
             children: <Widget>[
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    'Amount Due',
-                    style: TextStyle(
-                        fontFamily: 'SourceSansPro',
-                        color: ThemeColors.greyText,
-                        fontSize: 10),
-                  ),
-                  Text(
-                    '₦26,750.00',
-                    style: TextStyle(fontFamily: sourceSansPro, fontSize: 24),
-                  ),
-                  Text(
-                    'Loan taken on the 24th of July 2019',
-                    style: TextStyle(
-                        fontSize: 10,
-                        fontFamily: roboto,
-                        color: ThemeColors.greyText),
-                  ),
-                ],
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pushNamed(segnalazioniScreen);
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      'Amount Due',
+                      style: TextStyle(
+                          fontFamily: 'SourceSansPro',
+                          color: ThemeColors.greyText,
+                          fontSize: 10),
+                    ),
+                    Text(
+                      '₦26,750.00',
+                      style: TextStyle(fontFamily: sourceSansPro, fontSize: 24),
+                    ),
+                    Text(
+                      'Loan taken on the 24th of July 2019',
+                      style: TextStyle(
+                          fontSize: 10,
+                          fontFamily: roboto,
+                          color: ThemeColors.greyText),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
