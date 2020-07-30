@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:fluttersismic/screens/add_segnalazioni_screen/add_segnalazioni_screen.dart';
 import 'package:fluttersismic/screens/dashboard_screen/screens/dashboard_screen.dart';
 import 'package:fluttersismic/screens/login_screen/screens/login_screen.dart';
+import 'package:fluttersismic/screens/segnalazioni_screen/segnalazioni_screen.dart';
 import 'package:fluttersismic/screens/splash_screen/splash_screen.dart';
 //import 'package:good_driver_app/screens/EmergencyPage.dart';
 
 const indexRoute = '/';
 const dashboardScreen = '/dashboard_screen';
 const loginScreen = '/login_screen';
+const addSegnalazioniScreen = '/add_segnalazioni_screen';
+const segnalazioniScreen = '/segnalazioni_screen';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -23,6 +27,14 @@ class RouteGenerator {
         return MaterialPageRoute(
             builder: (_) => DashboardScreen(),
             settings: RouteSettings(name: "dashboard_screen"));
+//      case addSegnalazioniScreen:
+//        return MaterialPageRoute(
+//            builder: (_) => AddSegnalazioniScreen(),
+//            settings: RouteSettings(name: "add_segnalazioni_screen"));
+      case segnalazioniScreen:
+        return MaterialPageRoute(
+            builder: (_) => SegnalazioniScreen(),
+            settings: RouteSettings(name: "add_segnalazioni_screen"));
 
 //      case parkingDetailRoute:
 //        return MaterialPageRoute(
