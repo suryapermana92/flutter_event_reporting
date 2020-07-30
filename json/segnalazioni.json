@@ -1,0 +1,4 @@
+{
+  "richiedente_nominativo_nome": "Mario", "richiedente_nominativo_cognome": "Rossi", "richiedente_email": "sample@sample.it", "richiedente_telefono": "123456", "evento_indirizzo1": "via nazionale", "evento_civico1": "10",
+  "evento_comune": "firenze", "evento_ubicazione": "vicino bar", "evento_coordinate_lat": 41.7, "evento_coordinate_lon": 11.5, "id_tipologie_segnalazioni": 1
+}
