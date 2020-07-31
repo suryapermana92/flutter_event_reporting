@@ -222,7 +222,7 @@ class _RegisteredEmploymentListState extends State<RegisteredEmploymentList> {
               ),
             );
           }
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         });
   }
 }
