@@ -6,6 +6,7 @@ import 'package:fluttersismic/screens/dashboard_screen/bloc/bloc.dart';
 import 'package:fluttersismic/screens/dashboard_screen/repositories/dashboard_service.dart';
 import 'package:fluttersismic/screens/login_screen/bloc/bloc.dart';
 import 'package:fluttersismic/screens/segnalazioni_screen/bloc/bloc.dart';
+import 'package:fluttersismic/screens/segnalazioni_screen/repositories/segnalazioni_service.dart';
 import 'package:fluttersismic/utils/route_generator.dart';
 
 import 'screens/add_segnalazioni_screen/bloc/bloc.dart';
@@ -96,7 +97,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 DashboardScreenBloc(dashboardService),
           ),
           BlocProvider<SegnalazioniScreenBloc>(
-            create: (BuildContext context) => SegnalazioniScreenBloc(),
+            create: (BuildContext context) =>
+                SegnalazioniScreenBloc(segnalazioniService),
           ),
           BlocProvider<AddSegnalazioniBloc>(
             create: (BuildContext context) => AddSegnalazioniBloc(),

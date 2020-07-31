@@ -21,18 +21,17 @@ class _SegnalazioniScreenState extends State<SegnalazioniScreen> {
   var _phoneNumberFormatter =
       new MaskTextInputFormatter(mask: '+### (#)##########');
   var _dobController = new MaskTextInputFormatter(mask: '## / ## / ##');
-
+  SegnalazioniScreenBloc segnalazioniScreenBloc;
   @override
   void initState() {
     // TODO: implement initState
-
+    segnalazioniScreenBloc = BlocProvider.of<SegnalazioniScreenBloc>(context);
+    segnalazioniScreenBloc.add(GetSegnalazioniList());
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    SegnalazioniScreenBloc segnalazioniScreenBloc =
-        BlocProvider.of<SegnalazioniScreenBloc>(context);
     return Scaffold(
         key: _scaffoldKey,
         appBar: AppBarComponent(

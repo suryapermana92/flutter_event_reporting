@@ -1,4 +1,5 @@
 import 'package:fluttersismic/screens/add_segnalazioni_screen/bloc/add_segnalazioni_bloc.dart';
+import 'package:fluttersismic/screens/segnalazioni_screen/bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
 @immutable

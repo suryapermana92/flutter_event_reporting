@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:fluttersismic/models/segnalazioni_list.dart';
+import 'package:fluttersismic/screens/segnalazioni_screen/bloc/bloc.dart';
 import 'package:fluttersismic/styles/theme.dart';
 import 'package:fluttersismic/widgets/index.dart';
 
@@ -13,25 +15,21 @@ class RegisteredEmploymentList extends StatefulWidget {
 }
 
 class _RegisteredEmploymentListState extends State<RegisteredEmploymentList> {
+  SegnalazioniScreenBloc segnalazioniScreenBloc;
   @override
   void initState() {
     // TODO: implement initState
-    final AddSegnalazioniBloc employmentInformationScreenBloc =
-        BlocProvider.of<AddSegnalazioniBloc>(context);
-    employmentInformationScreenBloc.add(GetEmploymentList());
+    segnalazioniScreenBloc = BlocProvider.of<SegnalazioniScreenBloc>(context);
+    segnalazioniScreenBloc.add(GetSegnalazioniList());
     super.initState();
   }
 
-  renderSegnalazioniList() {
-    final AddSegnalazioniBloc employmentInformationScreenBloc =
-        BlocProvider.of<AddSegnalazioniBloc>(context);
-//    EmploymentData user = employmentInformationScreenBloc.state.employmentData;
-    List<EmploymentData> segnalazioniList =
-        employmentInformationScreenBloc.employments;
+  renderSegnalazioniList(data) {
+    List<SegnalazioniListData> segnalazioniList = data;
 
     return segnalazioniList
         .asMap()
-        .map((index, employment) {
+        .map((index, record) {
           return MapEntry(
               index,
               Column(
@@ -94,6 +92,43 @@ class _RegisteredEmploymentListState extends State<RegisteredEmploymentList> {
                                   height: 34,
                                   width: 34,
                                   decoration: BoxDecoration(
+                                      color: ThemeColors.appBarBlue,
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(8))),
+                                  child: Center(
+                                      child: Image.asset(
+                                    'assets/drawable-xxxhdpi/edit.png',
+                                    width: 12.3,
+                                  )),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  'View',
+                                  style: TextStyle(
+                                      fontFamily: sourceSansPro, fontSize: 10),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          onTap: () {
+//                            employmentInformationScreenBloc
+//                                .add(RemoveEmployment(index));
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            child: Column(
+                              children: <Widget>[
+                                Container(
+                                  height: 34,
+                                  width: 34,
+                                  decoration: BoxDecoration(
                                       color: ThemeColors.redBackground,
                                       borderRadius:
                                           BorderRadius.all(Radius.circular(8))),
@@ -129,7 +164,7 @@ class _RegisteredEmploymentListState extends State<RegisteredEmploymentList> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  Text(employment.employerName,
+                                  Text(record.richiedenteNominativoNome,
                                       style: TextStyle(
                                           fontFamily: sourceSansPro,
                                           color: ThemeColors.darkBlue)),
@@ -137,7 +172,7 @@ class _RegisteredEmploymentListState extends State<RegisteredEmploymentList> {
                                     height: 8,
                                   ),
                                   Text(
-                                    employment.workAddress,
+                                    record.richiedenteNominativoCognome,
                                     style: TextStyle(fontFamily: sourceSansPro),
                                   ),
                                 ],
@@ -151,7 +186,7 @@ class _RegisteredEmploymentListState extends State<RegisteredEmploymentList> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Text(
-                                '${employment.startDate} - ${employment.isCurrent ? 'date' : '${employment.endDate}'}',
+                                '${record.eventoUbicazione}',
                                 style: TextStyle(
                                     fontSize: 10,
                                     fontFamily: sourceSansPro,
@@ -177,19 +212,17 @@ class _RegisteredEmploymentListState extends State<RegisteredEmploymentList> {
 
   @override
   Widget build(BuildContext context) {
-    final AddSegnalazioniBloc employmentInformationScreenBloc =
-        BlocProvider.of<AddSegnalazioniBloc>(context);
-    return BlocBuilder<AddSegnalazioniBloc, AddSegnalazioniState>(
-        bloc: employmentInformationScreenBloc,
+    return BlocBuilder<SegnalazioniScreenBloc, SegnalazioniScreenState>(
+        bloc: segnalazioniScreenBloc,
         builder: (context, state) {
-          if (state is isLoadingSegnalazioni) {
-            return CircularProgressIndicator();
+          if (state is GetSegnalazioniListSuccess) {
+            return SingleChildScrollView(
+              child: Column(
+                children: renderSegnalazioniList(state.response.data),
+              ),
+            );
           }
-          return SingleChildScrollView(
-            child: Column(
-              children: renderSegnalazioniList(),
-            ),
-          );
+          return CircularProgressIndicator();
         });
   }
 }
