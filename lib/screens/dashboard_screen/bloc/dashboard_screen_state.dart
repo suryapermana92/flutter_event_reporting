@@ -14,12 +14,16 @@ class InitialDashboardScreenState extends DashboardScreenState {}
 
 class DashboardLoading extends DashboardScreenState {}
 
-class GetDashboardResponseSuccess extends DashboardScreenState {
-  final DashboardResponse response;
-  GetDashboardResponseSuccess({this.response});
-}
+class GetDashboardResponseSuccess extends DashboardScreenState {}
+
+class GetSegnalazioniTipologiaSuccess extends DashboardScreenState {}
 
 class GetDashboardResponseFailure extends DashboardScreenState {
   final String responseMessage;
   GetDashboardResponseFailure({this.responseMessage});
+}
+
+class GetSegnalazioniTipologiaFailure extends DashboardScreenState {
+  final String responseMessage;
+  GetSegnalazioniTipologiaFailure({this.responseMessage});
 }

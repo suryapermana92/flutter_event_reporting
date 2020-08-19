@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttersismic/screens/dashboard_screen/bloc/bloc.dart';
+import 'package:fluttersismic/screens/dashboard_screen/models/segnalazioni_tipologia_response.dart';
 //import 'package:nodcredit/bloc/borrower_dashboard/bloc.dart';
 //import 'package:nodcredit/common/index.dart';
 import 'package:fluttersismic/styles/theme.dart' as Theme;
@@ -30,12 +31,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
   ];
   List<double> _stops = [0.0, 0.7];
   int selectedInfoIndex = -1;
-
+  bool isExpandedFirstTime = true;
+  double score = 100;
   @override
   void initState() {
-    DashboardScreenBloc dashboardScreenBloc =
-        BlocProvider.of<DashboardScreenBloc>(context);
     dashboardScreenBloc.add(GetDashboardResponse());
+    dashboardScreenBloc.add(GetSegnalazioniTipologiaResponse());
     super.initState();
   }
 
@@ -79,75 +80,79 @@ class _DashboardScreenState extends State<DashboardScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Column(
-            children: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pushNamed(segnalazioniScreen);
-                },
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      'Amount Due',
-                      style: TextStyle(
-                          fontFamily: 'SourceSansPro',
-                          color: ThemeColors.greyText,
-                          fontSize: 10),
-                    ),
-                    Text(
-                      '₦26,750.00',
-                      style: TextStyle(fontFamily: sourceSansPro, fontSize: 24),
-                    ),
-                    Text(
-                      'Loan taken on the 24th of July 2019',
-                      style: TextStyle(
-                          fontSize: 10,
-                          fontFamily: roboto,
-                          color: ThemeColors.greyText),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+          RaisedButton(
+            child: Text('Segnalazioni'),
+            onPressed: () {
+              Navigator.of(context).pushNamed(segnalazioniScreen);
+            },
           ),
-          Container(
-            padding: EdgeInsets.only(top: 8, bottom: 3),
-            width: 68,
-            height: double.infinity,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(6)),
-                color: Colors.white),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Container(
-                  height: 15,
-                  color: ThemeColors.orange50,
-                  child: Center(
-                    child: Text(
-                      'DUE IN',
-                      style: TextStyle(
-                          fontSize: 10,
-                          fontFamily: sourceSansPro,
-                          fontWeight: FontWeight.w600),
-                    ),
-                  ),
-                ),
-                Text(
-                  '3',
-                  style: TextStyle(
-                      fontFamily: sourceSansPro, height: 1, fontSize: 32),
-                ),
-                Text(
-                  'days',
-                  style: TextStyle(
-                      height: 1, fontFamily: sourceSansPro, fontSize: 10),
-                ),
-              ],
-            ),
-          )
+//          Column(
+//            children: <Widget>[
+//              GestureDetector(
+//                onTap: () {},
+//                child: Column(
+//                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                  crossAxisAlignment: CrossAxisAlignment.start,
+//                  children: <Widget>[
+//                    Text(
+//                      'Amount Due',
+//                      style: TextStyle(
+//                          fontFamily: 'SourceSansPro',
+//                          color: ThemeColors.greyText,
+//                          fontSize: 10),
+//                    ),
+//                    Text(
+//                      '₦26,750.00',
+//                      style: TextStyle(fontFamily: sourceSansPro, fontSize: 24),
+//                    ),
+//                    Text(
+//                      'Loan taken on the 24th of July 2019',
+//                      style: TextStyle(
+//                          fontSize: 10,
+//                          fontFamily: roboto,
+//                          color: ThemeColors.greyText),
+//                    ),
+//                  ],
+//                ),
+//              ),
+//            ],
+//          ),
+//          Container(
+//            padding: EdgeInsets.only(top: 8, bottom: 3),
+//            width: 68,
+//            height: double.infinity,
+//            decoration: BoxDecoration(
+//                borderRadius: BorderRadius.all(Radius.circular(6)),
+//                color: Colors.white),
+//            child: Column(
+//              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//              children: <Widget>[
+//                Container(
+//                  height: 15,
+//                  color: ThemeColors.orange50,
+//                  child: Center(
+//                    child: Text(
+//                      'DUE IN',
+//                      style: TextStyle(
+//                          fontSize: 10,
+//                          fontFamily: sourceSansPro,
+//                          fontWeight: FontWeight.w600),
+//                    ),
+//                  ),
+//                ),
+//                Text(
+//                  '3',
+//                  style: TextStyle(
+//                      fontFamily: sourceSansPro, height: 1, fontSize: 32),
+//                ),
+//                Text(
+//                  'days',
+//                  style: TextStyle(
+//                      height: 1, fontFamily: sourceSansPro, fontSize: 10),
+//                ),
+//              ],
+//            ),
+//          )
         ],
       ),
     );
@@ -155,7 +160,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Widget CompleteVerificationSection() {
     return Container(
-      height: 600,
       width: MediaQuery.of(context).size.width,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -163,7 +167,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Padding(
             padding: const EdgeInsets.only(left: 20, bottom: 10),
             child: Text(
-              'Complete verification',
+              'Tipologie Segnalazioni',
               style: TextStyle(
                   fontSize: 14,
                   fontFamily: roboto,
@@ -188,235 +192,154 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         ]),
                     child: Column(
                       children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              '40%',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: roboto,
-                                  fontSize: 20),
-                            ),
-                            Text(
-                              '2 of 5 completed',
-                              style: TextStyle(
-                                  fontFamily: sourceSansPro,
-                                  fontSize: 12,
-                                  color: ThemeColors.darkText),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        LayoutBuilder(
-                          builder: (context, constraint) {
-                            return Stack(
-                              children: <Widget>[
-                                Container(
-                                  height: 7,
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey[200],
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(4))),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.symmetric(vertical: 1),
-                                  height: 5,
-                                  width: (constraint.maxWidth * 40 / 100),
-                                  decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        colors: _colors,
-                                        stops: _stops,
-                                      ),
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(4))),
-                                ),
-                              ],
-                            );
-                          },
-                        ),
-                        ListDivider(
-                          height: 0.5,
-                          margin: EdgeInsets.symmetric(vertical: 20),
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Column(
-                              children: <Widget>[
-                                Container(
-                                  height: 34,
-                                  width: 34,
-                                  decoration: BoxDecoration(
-                                      color: ThemeColors.lightBlueSolid,
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(8))),
-                                  child: Center(child: SizedBox()
-//                                    Image.asset(
-//                                        'assets/drawable-xxxhdpi/bank_blue.png',
-//                                        width: 20,
-//                                        height: 20,
-//                                        fit: BoxFit.fill),
-                                      ),
-                                )
-                              ],
-                            ),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    'Bank Account Details',
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontFamily: roboto,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text(
-                                    'Input Bank details, i.e. name of bank, bank account number, etc.',
-                                    style: TextStyle(
-                                      fontFamily: sourceSansPro,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.normal,
-                                      height: 1.5,
-                                      color: ThemeColors.darkBlue,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                        ListDivider(
-                          height: 0.5,
-                          margin: EdgeInsets.symmetric(vertical: 20),
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Column(
-                              children: <Widget>[
-                                Container(
-                                  height: 34,
-                                  width: 34,
-                                  decoration: BoxDecoration(
-                                      color: ThemeColors.lightBlueSolid,
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(8))),
-                                  child: Center(child: SizedBox()
-//                                    Image.asset(
-//                                      'assets/drawable-xxxhdpi/employment_blue.png',
-//                                      width: 20,
-//                                      height: 20,
-//                                    ),
-                                      ),
-                                )
-                              ],
-                            ),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    'Employment Information',
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontFamily: roboto,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text(
-                                    'We’ll require details of your work history and current employment.',
-                                    style: TextStyle(
-                                      fontFamily: sourceSansPro,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.normal,
-                                      height: 1.5,
-                                      color: ThemeColors.darkBlue,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                        ListDivider(
-                          height: 0.5,
-                          margin: EdgeInsets.symmetric(vertical: 20),
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Column(
-                              children: <Widget>[
-                                Container(
-                                  height: 34,
-                                  width: 34,
-                                  decoration: BoxDecoration(
-                                      color: ThemeColors.lightBlueSolid,
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(8))),
-                                  child: Center(child: SizedBox()
-//                                    Image.asset(
-//                                        'assets/drawable-xxxhdpi/card_blue.png',
-//                                        width: 20,
-//                                        height: 20),
-                                      ),
-                                )
-                              ],
-                            ),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    'Billing Methods',
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontFamily: roboto,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text(
-                                    'Add debit card(s) that will be used for loan repayment.',
-                                    style: TextStyle(
-                                      fontFamily: sourceSansPro,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.normal,
-                                      height: 1.5,
-                                      color: ThemeColors.darkBlue,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
+//                        Row(
+//                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                          children: <Widget>[
+//                            Text(
+//                              '40%',
+//                              style: TextStyle(
+//                                  fontWeight: FontWeight.w500,
+//                                  fontFamily: roboto,
+//                                  fontSize: 20),
+//                            ),
+//                            Text(
+//                              '2 of 5 completed',
+//                              style: TextStyle(
+//                                  fontFamily: sourceSansPro,
+//                                  fontSize: 12,
+//                                  color: ThemeColors.darkText),
+//                            ),
+//                          ],
+//                        ),
+//                        SizedBox(
+//                          height: 15,
+//                        ),
+//                        LayoutBuilder(
+//                          builder: (context, constraint) {
+//                            return Stack(
+//                              children: <Widget>[
+//                                Container(
+//                                  height: 7,
+//                                  width: double.infinity,
+//                                  decoration: BoxDecoration(
+//                                      color: Colors.grey[200],
+//                                      borderRadius:
+//                                          BorderRadius.all(Radius.circular(4))),
+//                                ),
+//                                Container(
+//                                  margin: EdgeInsets.symmetric(vertical: 1),
+//                                  height: 5,
+//                                  width: (constraint.maxWidth * 40 / 100),
+//                                  decoration: BoxDecoration(
+//                                      gradient: LinearGradient(
+//                                        colors: _colors,
+//                                        stops: _stops,
+//                                      ),
+//                                      borderRadius:
+//                                          BorderRadius.all(Radius.circular(4))),
+//                                ),
+//                              ],
+//                            );
+//                          },
+//                        ),
+//                        ListDivider(
+//                          height: 0.5,
+//                          margin: EdgeInsets.symmetric(vertical: 20),
+//                        ),
+                        BlocBuilder<DashboardScreenBloc, DashboardScreenState>(
+                            bloc: dashboardScreenBloc,
+                            builder: (context, state) {
+                              return Column(
+                                children: renderTipologiaSegnalazioni(
+                                    dashboardScreenBloc
+                                        .segnalazionTipologiaData),
+                              );
+                            }),
                       ],
                     )),
               ]),
         ],
       ),
     );
+  }
+
+  List<Widget> renderTipologiaSegnalazioni(
+      List<SegnalazionTipologiaData> data) {
+    if (data == null) {
+      return [CircularProgressIndicator()];
+    }
+    return dashboardScreenBloc.segnalazionTipologiaData
+        .asMap()
+        .map((index, SegnalazionTipologiaData record) {
+          return MapEntry(
+              index,
+              Column(
+                children: <Widget>[
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Column(
+                        children: <Widget>[
+                          Container(
+                            height: 34,
+                            width: 34,
+                            decoration: BoxDecoration(
+                                color: ThemeColors.lightBlueSolid,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8))),
+                            child: Center(child: SizedBox()
+//                                    Image.asset(
+//                                        'assets/drawable-xxxhdpi/bank_blue.png',
+//                                        width: 20,
+//                                        height: 20,
+//                                        fit: BoxFit.fill),
+                                ),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              '${record.descrizione}',
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: roboto,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              'This is ${record.descrizione}',
+                              style: TextStyle(
+                                fontFamily: sourceSansPro,
+                                fontSize: 12,
+                                fontWeight: FontWeight.normal,
+                                height: 1.5,
+                                color: ThemeColors.darkBlue,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                  if (index != data.length - 1)
+                    ListDivider(
+                      height: 0.5,
+                      margin: EdgeInsets.symmetric(vertical: 20),
+                    ),
+                ],
+              ));
+        })
+        .values
+        .toList();
+    ;
   }
 
   List<Widget> renderScoreInfo(score) {
@@ -846,8 +769,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    DashboardScreenBloc dashboardScreenBloc =
-        BlocProvider.of<DashboardScreenBloc>(context);
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -871,7 +792,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   return Center(
                     child: CircularProgressIndicator(),
                   );
-                } else if (state is GetDashboardResponseSuccess) {
+                } else if (dashboardScreenBloc.dashboardResponse != null) {
                   return SingleChildScrollView(
                     controller: _scrollController,
                     child: Stack(
@@ -902,9 +823,27 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               print('tap container');
                               _scrollController.animateTo(0.0,
                                   duration: _duration, curve: Curves.easeInOut);
-
+                              isExpandedFirstTime
+                                  ? Future.delayed(Duration(milliseconds: 500),
+                                      () {
+                                      setState(() {
+                                        score = dashboardScreenBloc
+                                            .dashboardResponse
+                                            .data
+                                            .user
+                                            .scoresAmount
+                                            .toDouble();
+                                      });
+                                    })
+                                  : score;
                               setState(() {
+//                                score = isExpandedFirstTime
+//                                    ? state.response.data.user.scoresAmount
+//                                        .toDouble()
+//                                    : score;
+
                                 isExpanded = !isExpanded;
+                                isExpandedFirstTime = false;
                                 selectedInfoIndex = -1;
                               });
                             },
@@ -953,8 +892,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                     fontFamily:
                                                         'SourceSansPro'),
                                             duration: _duration,
-                                            child: Text(state
-                                                .response.data.user.scoresAmount
+                                            child: Text(dashboardScreenBloc
+                                                .dashboardResponse
+                                                .data
+                                                .user
+                                                .scoresAmount
                                                 .toString()),
                                           ),
                                           AnimatedContainer(
@@ -967,8 +909,31 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                   duration: _duration,
                                                   curve: Curves.easeInOut);
 
+                                              isExpandedFirstTime
+                                                  ? Future.delayed(
+                                                      Duration(
+                                                          milliseconds: 500),
+                                                      () {
+                                                      setState(() {
+                                                        score =
+                                                            dashboardScreenBloc
+                                                                .dashboardResponse
+                                                                .data
+                                                                .user
+                                                                .scoresAmount
+                                                                .toDouble();
+                                                      });
+                                                    })
+                                                  : score;
                                               setState(() {
+//                                                score = isExpandedFirstTime
+//                                                    ? state.response.data.user
+//                                                        .scoresAmount
+//                                                        .toDouble()
+//                                                    : score;
+
                                                 isExpanded = !isExpanded;
+                                                isExpandedFirstTime = false;
                                                 selectedInfoIndex = -1;
                                               });
                                             },
@@ -1011,8 +976,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                               child: Container(
                                                 child: SleekCircularSlider(
                                                   min: 100,
-                                                  max: 900,
-                                                  initialValue: 750,
+                                                  max: 120,
+                                                  initialValue: score,
                                                   appearance: CircularSliderAppearance(
                                                       size: 150,
                                                       startAngle: 180,
@@ -1061,7 +1026,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                               sourceSansPro),
                                                     ),
                                                     Text(
-                                                      '900',
+                                                      '120',
                                                       style: TextStyle(
                                                           fontSize: 10,
                                                           fontFamily:
@@ -1234,16 +1199,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             child: CompleteVerificationSection(),
                           ),
                         ),
-                        AnimatedPositioned(
-                          duration: _duration,
-                          curve: Curves.easeInOut,
-                          top: isExpanded ? screenHeight : 705,
-                          child: AnimatedOpacity(
-                            duration: _opacityDuration,
-                            opacity: isExpanded ? 0 : 1,
-                            child: TooltipSection(),
-                          ),
-                        ),
+//                        AnimatedPositioned(
+//                          duration: _duration,
+//                          curve: Curves.easeInOut,
+//                          top: isExpanded ? screenHeight : 705,
+//                          child: AnimatedOpacity(
+//                            duration: _opacityDuration,
+//                            opacity: isExpanded ? 0 : 1,
+//                            child: TooltipSection(),
+//                          ),
+//                        ),
 //                  AnimatedPositioned(
 //                    duration: _duration,
 //                    curve: Curves.easeInOut,

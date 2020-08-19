@@ -8,3 +8,5 @@ abstract class DashboardScreenEvent extends Equatable {
 }
 
 class GetDashboardResponse extends DashboardScreenEvent {}
+
+class GetSegnalazioniTipologiaResponse extends DashboardScreenEvent {}

@@ -18,6 +18,18 @@ class DashboardService {
     final response = await http.get(url, headers: headers);
     return response;
   }
+
+  Future<http.Response> getSegnalazioniTipologia() async {
+    String accessToken = await authenticationService.getCurrentUser();
+
+    var url = "$api_base_url/1/tipologie_segnalazioni";
+    Map<String, String> headers = {
+      'Authorization': 'Bearer $accessToken',
+      'Accept': 'application/json',
+    };
+    final response = await http.get(url, headers: headers);
+    return response;
+  }
 }
 
 DashboardService dashboardService = DashboardService();
