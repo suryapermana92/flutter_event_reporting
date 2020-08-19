@@ -1,7 +1,23 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.silversun.fluttersismic">
+    package="it.sismic.pm">
     <!-- Flutter needs it to communicate with the running application
          to allow setting breakpoints, to provide hot reload, etc.
     -->
+    <application android:name="io.flutter.app.FlutterApplication"
+        android:label="fluttersismic"
+        android:icon="@mipmap/ic_launcher">
+        <activity android:name=".MainActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/LaunchTheme"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustResize">
+            <!--            GOOGLE MAP API KEY-->
+            <meta-data
+                android:name="com.google.android.geo.API_KEY"
+                android:value="XXXXXX"
+                />
+        </activity>
+    </application>
     <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>

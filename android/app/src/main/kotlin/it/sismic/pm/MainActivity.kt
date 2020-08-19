@@ -1,4 +1,4 @@
-package com.silversun.fluttersismic
+package it.sismic.pm
 
 import io.flutter.embedding.android.FlutterActivity
 
