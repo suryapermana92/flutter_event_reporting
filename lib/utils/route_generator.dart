@@ -27,10 +27,10 @@ class RouteGenerator {
         return MaterialPageRoute(
             builder: (_) => DashboardScreen(),
             settings: RouteSettings(name: "dashboard_screen"));
-//      case addSegnalazioniScreen:
-//        return MaterialPageRoute(
-//            builder: (_) => AddSegnalazioniScreen(),
-//            settings: RouteSettings(name: "add_segnalazioni_screen"));
+      case addSegnalazioniScreen:
+        return MaterialPageRoute(
+            builder: (_) => AddSegnalazioniScreen(),
+            settings: RouteSettings(name: "add_segnalazioni_screen"));
       case segnalazioniScreen:
         return MaterialPageRoute(
             builder: (_) => SegnalazioniScreen(),

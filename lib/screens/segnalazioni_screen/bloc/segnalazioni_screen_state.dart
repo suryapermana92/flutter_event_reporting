@@ -1,5 +1,3 @@
-import 'package:fluttersismic/models/segnalazioni.dart';
-import 'package:fluttersismic/models/segnalazioni_list.dart';
 import 'package:meta/meta.dart';
 
 @immutable
@@ -9,12 +7,13 @@ class InitialSegnalazioniScreenState extends SegnalazioniScreenState {}
 
 class IsLoadingSegnalazioniList extends SegnalazioniScreenState {}
 
-class GetSegnalazioniListSuccess extends SegnalazioniScreenState {
-  final SegnalazionList response;
-  GetSegnalazioniListSuccess({this.response});
-}
+class GetSegnalazioniListSuccess extends SegnalazioniScreenState {}
 
 class GetSegnalazioniListFailure extends SegnalazioniScreenState {
   final String responseMessage;
   GetSegnalazioniListFailure({this.responseMessage});
 }
+
+class DeleteSegnalazioniSuccess extends SegnalazioniScreenState {}
+
+class DeleteSegnalazioniFailure extends SegnalazioniScreenState {}

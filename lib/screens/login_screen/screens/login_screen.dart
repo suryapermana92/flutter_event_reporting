@@ -100,12 +100,12 @@ class _LoginScreenState extends State<LoginScreen>
               bloc: loginBloc,
               listener: (context, state) {
                 if (state is LoginSuccess) {
-                  showInSnackBar(state.responseMessage);
+                  showSnackbarSuccess(state.responseMessage);
                   Future.delayed(Duration(seconds: 1), () {
                     Navigator.of(context).pushReplacementNamed(dashboardScreen);
                   });
                 } else if (state is LoginFailure) {
-                  showInSnackBar(state.responseMessage);
+                  showSnackbarError(state.responseMessage);
                 }
               },
               builder: (context, state) {
@@ -203,7 +203,24 @@ class _LoginScreenState extends State<LoginScreen>
     _pageController = PageController();
   }
 
-  void showInSnackBar(String value) {
+  void showSnackbarSuccess(String value) {
+    FocusScope.of(context).requestFocus(new FocusNode());
+    _scaffoldKey.currentState?.removeCurrentSnackBar();
+    _scaffoldKey.currentState.showSnackBar(new SnackBar(
+      content: new Text(
+        value,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+            color: Colors.white,
+            fontSize: 16.0,
+            fontFamily: "WorkSansSemiBold"),
+      ),
+      backgroundColor: Colors.green,
+      duration: Duration(seconds: 5),
+    ));
+  }
+
+  void showSnackbarError(String value) {
     FocusScope.of(context).requestFocus(new FocusNode());
     _scaffoldKey.currentState?.removeCurrentSnackBar();
     _scaffoldKey.currentState.showSnackBar(new SnackBar(
@@ -526,7 +543,7 @@ class _LoginScreenState extends State<LoginScreen>
                                 print(
                                     '${loginEmailController.text}, ${loginPasswordController.text}');
                                 if (acceptTerm != true) {
-                                  showInSnackBar(
+                                  showSnackbarError(
                                       "Please Accept our Terms and Conditions before proceed");
                                   return null;
                                 } else {
@@ -770,7 +787,7 @@ class _LoginScreenState extends State<LoginScreen>
                         return null;
                       } else {
                         if (acceptTerm != true) {
-                          showInSnackBar(
+                          showSnackbarError(
                               "Please Accept our Terms and Conditions before proceed");
                           return null;
                         } else {

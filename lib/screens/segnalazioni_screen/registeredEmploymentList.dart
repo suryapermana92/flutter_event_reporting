@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:fluttersismic/models/segnalazioni_list.dart';
+import 'package:fluttersismic/models/segnalazioni_response.dart';
+import 'package:fluttersismic/screens/dashboard_screen/bloc/bloc.dart';
 import 'package:fluttersismic/screens/segnalazioni_screen/bloc/bloc.dart';
 import 'package:fluttersismic/styles/theme.dart';
+import 'package:fluttersismic/utils/route_generator.dart';
 import 'package:fluttersismic/widgets/index.dart';
 
 import '../add_segnalazioni_screen/bloc/bloc.dart';
@@ -15,21 +17,24 @@ class RegisteredEmploymentList extends StatefulWidget {
 }
 
 class _RegisteredEmploymentListState extends State<RegisteredEmploymentList> {
-  SegnalazioniScreenBloc segnalazioniScreenBloc;
   @override
   void initState() {
     // TODO: implement initState
-    segnalazioniScreenBloc = BlocProvider.of<SegnalazioniScreenBloc>(context);
     segnalazioniScreenBloc.add(GetSegnalazioniList());
     super.initState();
   }
 
   renderSegnalazioniList(data) {
-    List<SegnalazioniListData> segnalazioniList = data;
+    List<Segnalazioni> segnalazioniList = data;
 
     return segnalazioniList
         .asMap()
         .map((index, record) {
+          String tipologieSegnalazioni = dashboardScreenBloc
+              .segnalazionTipologiaData
+              .firstWhere(
+                  (element) => element.id == record.idTipologieSegnalazioni)
+              .descrizione;
           return MapEntry(
               index,
               Column(
@@ -44,8 +49,10 @@ class _RegisteredEmploymentListState extends State<RegisteredEmploymentList> {
                           onTap: () {
 //                            employmentInformationScreenBloc
 //                                .add(EditEmployment(index));
-//                            Navigator.of(context)
-//                                .pushNamed(addEmploymentScreen);
+                            segnalazioniScreenBloc
+                                .add(EditSegnalazioni(id: record.id));
+                            Navigator.of(context)
+                                .pushNamed(addSegnalazioniScreen);
                           },
                           child: Container(
                             padding: EdgeInsets.symmetric(horizontal: 10),
@@ -81,8 +88,10 @@ class _RegisteredEmploymentListState extends State<RegisteredEmploymentList> {
                         color: Colors.transparent,
                         child: InkWell(
                           onTap: () {
-//                            employmentInformationScreenBloc
-//                                .add(RemoveEmployment(index));
+                            segnalazioniScreenBloc
+                                .add(ViewSegnalazioni(id: record.id));
+                            Navigator.of(context)
+                                .pushNamed(addSegnalazioniScreen);
                           },
                           child: Container(
                             padding: EdgeInsets.symmetric(horizontal: 10),
@@ -118,8 +127,8 @@ class _RegisteredEmploymentListState extends State<RegisteredEmploymentList> {
                         color: Colors.transparent,
                         child: InkWell(
                           onTap: () {
-//                            employmentInformationScreenBloc
-//                                .add(RemoveEmployment(index));
+                            segnalazioniScreenBloc
+                                .add(DeleteSegnalazioniList(id: record.id));
                           },
                           child: Container(
                             padding: EdgeInsets.symmetric(horizontal: 10),
@@ -164,7 +173,10 @@ class _RegisteredEmploymentListState extends State<RegisteredEmploymentList> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  Text(record.richiedenteNominativoNome,
+                                  Text(
+                                      record.richiedenteNominativoNome != null
+                                          ? record.richiedenteNominativoNome
+                                          : "N/A",
                                       style: TextStyle(
                                           fontFamily: sourceSansPro,
                                           color: ThemeColors.darkBlue)),
@@ -172,7 +184,8 @@ class _RegisteredEmploymentListState extends State<RegisteredEmploymentList> {
                                     height: 8,
                                   ),
                                   Text(
-                                    record.richiedenteNominativoCognome,
+//                                    '${record.eventoComune != "" ? record.eventoComune + ", " : record.eventoComune} ${record.eventoIndirizzo1 != "" ? record.eventoIndirizzo1 + "," : record.eventoIndirizzo1} ${record.eventoCivico1 != "" ? record.eventoCivico1 + "," : record.eventoCivico1} ${record.eventoIndirizzo2 != "" ? record.eventoIndirizzo2 + "," : record.eventoIndirizzo2} ${record.eventoCivico2 != "" ? record.eventoCivico2 + "," : record.eventoCivico2} ${record.eventoUbicazione}',
+                                    '${record.eventoComune != "" ? record.eventoComune + ", " : record.eventoComune} ${record.eventoIndirizzo1 != "" ? record.eventoIndirizzo1 + "," : record.eventoIndirizzo1} ${record.eventoCivico1 != "" ? record.eventoCivico1 + "," : record.eventoCivico1}  ${record.eventoUbicazione}',
                                     style: TextStyle(fontFamily: sourceSansPro),
                                   ),
                                 ],
@@ -186,7 +199,7 @@ class _RegisteredEmploymentListState extends State<RegisteredEmploymentList> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Text(
-                                '${record.eventoUbicazione}',
+                                '${tipologieSegnalazioni}',
                                 style: TextStyle(
                                     fontSize: 10,
                                     fontFamily: sourceSansPro,
@@ -212,13 +225,17 @@ class _RegisteredEmploymentListState extends State<RegisteredEmploymentList> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SegnalazioniScreenBloc, SegnalazioniScreenState>(
+    return BlocConsumer<SegnalazioniScreenBloc, SegnalazioniScreenState>(
         bloc: segnalazioniScreenBloc,
+        listener: (context, state) {
+          if (state is DeleteSegnalazioniSuccess) {}
+        },
         builder: (context, state) {
-          if (state is GetSegnalazioniListSuccess) {
+          if (state is! IsLoadingSegnalazioniList) {
             return SingleChildScrollView(
               child: Column(
-                children: renderSegnalazioniList(state.response.data),
+                children: renderSegnalazioniList(
+                    segnalazioniScreenBloc.segnalazioniList),
               ),
             );
           }

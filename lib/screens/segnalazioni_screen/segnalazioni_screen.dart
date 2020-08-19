@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttersismic/screens/segnalazioni_screen/registeredEmploymentList.dart';
 import 'package:fluttersismic/styles/theme.dart';
+import 'package:fluttersismic/utils/route_generator.dart';
 import 'package:fluttersismic/widgets/index.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
@@ -21,11 +22,9 @@ class _SegnalazioniScreenState extends State<SegnalazioniScreen> {
   var _phoneNumberFormatter =
       new MaskTextInputFormatter(mask: '+### (#)##########');
   var _dobController = new MaskTextInputFormatter(mask: '## / ## / ##');
-  SegnalazioniScreenBloc segnalazioniScreenBloc;
   @override
   void initState() {
     // TODO: implement initState
-    segnalazioniScreenBloc = BlocProvider.of<SegnalazioniScreenBloc>(context);
     segnalazioniScreenBloc.add(GetSegnalazioniList());
     super.initState();
   }
@@ -84,8 +83,8 @@ class _SegnalazioniScreenState extends State<SegnalazioniScreen> {
                   elevation: 0,
                   padding: EdgeInsets.all(0),
                   onPressed: () {
-//                    SegnalazioniScreenBloc.add(EditEmployment(-1));
-//                    Navigator.of(context).pushNamed(addSegnalazioniScreen);
+                    segnalazioniScreenBloc.add(EditSegnalazioni(id: -1));
+                    Navigator.of(context).pushNamed(addSegnalazioniScreen);
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 10),
