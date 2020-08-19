@@ -92,16 +92,9 @@ class _MyHomePageState extends State<MyHomePage> {
             create: (BuildContext context) =>
                 AuthenticationBloc(authenticationService),
           ),
-          BlocProvider<DashboardScreenBloc>(
-            create: (BuildContext context) =>
-                DashboardScreenBloc(dashboardService),
-          ),
-          BlocProvider<SegnalazioniScreenBloc>(
-            create: (BuildContext context) =>
-                SegnalazioniScreenBloc(segnalazioniService),
-          ),
           BlocProvider<AddSegnalazioniBloc>(
-            create: (BuildContext context) => AddSegnalazioniBloc(),
+            create: (BuildContext context) =>
+                AddSegnalazioniBloc(segnalazioniService),
           ),
         ],
         child: MaterialApp(
