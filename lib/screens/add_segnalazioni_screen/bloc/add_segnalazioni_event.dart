@@ -1,3 +1,4 @@
+import 'package:fluttersismic/models/segnalazioni_response.dart';
 import 'package:fluttersismic/screens/add_segnalazioni_screen/bloc/add_segnalazioni_bloc.dart';
 import 'package:fluttersismic/screens/segnalazioni_screen/bloc/bloc.dart';
 import 'package:meta/meta.dart';
@@ -7,12 +8,20 @@ abstract class AddSegnalazioniEvent {}
 
 class ResetEmploymentFormState extends AddSegnalazioniEvent {}
 
-class GetEmploymentList extends AddSegnalazioniEvent {}
-
-class UpdateEmploymentForm extends AddSegnalazioniEvent {
-  UpdateEmploymentForm({this.employmentData});
-
-  final EmploymentData employmentData;
+class GetSingleSegnalazioniData extends AddSegnalazioniEvent {
+  GetSingleSegnalazioniData({this.id});
+  final String id;
 }
 
-class AddEmploymentSuccess extends AddSegnalazioniEvent {}
+class UpdateSegnalazioniRequest extends AddSegnalazioniEvent {
+  UpdateSegnalazioniRequest({this.id, this.segnalazioniForm});
+
+  final Segnalazioni segnalazioniForm;
+  final int id;
+}
+
+class ReportNewSegnalazioni extends AddSegnalazioniEvent {
+  ReportNewSegnalazioni(this.segnalazioniForm);
+
+  final Segnalazioni segnalazioniForm;
+}

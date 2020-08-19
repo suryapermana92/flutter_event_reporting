@@ -1,16 +1,40 @@
 // To parse this JSON data, do
 //
-//     final segnalazioni = segnalazioniFromJson(jsonString);
+//     final segnalazioniResponse = segnalazioniResponseFromJson(jsonString);
 
 import 'dart:convert';
 
-Segnalazioni segnalazioniFromJson(String str) =>
-    Segnalazioni.fromJson(json.decode(str));
+SegnalazioniResponse segnalazioniResponseFromJson(String str) =>
+    SegnalazioniResponse.fromJson(json.decode(str));
 
-String segnalazioniToJson(Segnalazioni data) => json.encode(data.toJson());
+String segnalazioniResponseToJson(SegnalazioniResponse data) =>
+    json.encode(data.toJson());
+
+class SegnalazioniResponse {
+  SegnalazioniResponse({
+    this.data,
+    this.totRows,
+  });
+
+  List<Segnalazioni> data;
+  int totRows;
+
+  factory SegnalazioniResponse.fromJson(Map<String, dynamic> json) =>
+      SegnalazioniResponse(
+        data: List<Segnalazioni>.from(
+            json["data"].map((x) => Segnalazioni.fromJson(x))),
+        totRows: json["totRows"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+        "totRows": totRows,
+      };
+}
 
 class Segnalazioni {
   Segnalazioni({
+    this.id,
     this.richiedenteNominativoNome,
     this.richiedenteNominativoCognome,
     this.richiedenteEmail,
@@ -24,6 +48,7 @@ class Segnalazioni {
     this.idTipologieSegnalazioni,
   });
 
+  int id;
   String richiedenteNominativoNome;
   String richiedenteNominativoCognome;
   String richiedenteEmail;
@@ -37,6 +62,7 @@ class Segnalazioni {
   int idTipologieSegnalazioni;
 
   factory Segnalazioni.fromJson(Map<String, dynamic> json) => Segnalazioni(
+        id: json["id"],
         richiedenteNominativoNome: json["richiedente_nominativo_nome"],
         richiedenteNominativoCognome: json["richiedente_nominativo_cognome"],
         richiedenteEmail: json["richiedente_email"],
@@ -51,6 +77,7 @@ class Segnalazioni {
       );
 
   Map<String, dynamic> toJson() => {
+        "id": id,
         "richiedente_nominativo_nome": richiedenteNominativoNome,
         "richiedente_nominativo_cognome": richiedenteNominativoCognome,
         "richiedente_email": richiedenteEmail,
