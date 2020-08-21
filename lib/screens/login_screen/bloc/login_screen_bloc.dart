@@ -52,7 +52,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           _authenticationBloc.add(UserLoggedIn(access_token: access_token));
         } else {
           yield LoginFailure(
-              responseMessage: 'Something very weird just happened');
+              responseMessage: 'Login Failed: code ${response.statusCode}');
         }
         // push new authentication event
 
