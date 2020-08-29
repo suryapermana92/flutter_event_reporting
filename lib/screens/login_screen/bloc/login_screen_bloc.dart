@@ -58,7 +58,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
       } else {
         yield LoginFailure(
-            responseMessage: 'Something very weird just happened');
+            responseMessage: 'Login Failed: code ${response.statusCode}');
       }
     } catch (err) {
       yield LoginFailure(

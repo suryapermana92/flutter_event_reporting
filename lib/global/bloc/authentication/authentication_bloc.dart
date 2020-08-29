@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:fluttersismic/global/services/auth.dart';
+import 'package:fluttersismic/models/user.dart';
+import 'package:fluttersismic/utils/jwt_decoder.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import './bloc.dart';
 
 class AuthenticationBloc
@@ -22,6 +25,12 @@ class AuthenticationBloc
       final accessToken = await _authenticationService.getCurrentUser();
 
       if (accessToken != null) {
+        bool isTokenExpired = JwtDecoder.isExpired(accessToken);
+
+        if (isTokenExpired) {
+          yield* _mapUserLoggedOutToState();
+          return;
+        }
         yield AuthenticationAuthenticated(token: accessToken);
       } else {
         yield AuthenticationNotAuthenticated();
@@ -39,8 +48,7 @@ class AuthenticationBloc
     yield AuthenticationAuthenticated(token: accessToken);
   }
 
-  Stream<AuthenticationState> _mapUserLoggedOutToState(
-      UserLoggedOut event) async* {
+  Stream<AuthenticationState> _mapUserLoggedOutToState() async* {
     await _authenticationService.signOut();
     yield AuthenticationNotAuthenticated();
   }
@@ -59,7 +67,7 @@ class AuthenticationBloc
     }
 
     if (event is UserLoggedOut) {
-      yield* _mapUserLoggedOutToState(event);
+      yield* _mapUserLoggedOutToState();
     }
   }
 }
