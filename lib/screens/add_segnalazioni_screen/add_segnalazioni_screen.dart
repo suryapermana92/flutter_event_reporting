@@ -39,14 +39,26 @@ class _AddSegnalazioniScreenState extends State<AddSegnalazioniScreen> {
   AddSegnalazioniBloc addSegnalazioniBloc;
   int selectedId;
   bool isView;
-  Completer<GoogleMapController> _controller = googleMapBloc.controller;
+  Completer<GoogleMapController> _completer = googleMapBloc.controller;
   GoogleMapController mapController = googleMapBloc.mapController;
   bool isMapCreated = googleMapBloc.isMapCreated;
   Segnalazioni editingSegnalazioni;
+  LatLng _initialPosition;
+  LatLng currentPosition;
+  final Set<Marker> _markers = {};
+
   @override
   void initState() {
+    _indrizzoController.addListener(getCoordinate());
     addSegnalazioniBloc = BlocProvider.of<AddSegnalazioniBloc>(context);
-
+    _initialPosition = LatLng(43.769562, 11.255814);
+    _markers.add(
+      Marker(
+        markerId: MarkerId("1"),
+        position: _initialPosition,
+        icon: BitmapDescriptor.defaultMarker,
+      ),
+    );
     // TODO: implement initState
     selectedId = segnalazioniScreenBloc.selectedId;
     isView = segnalazioniScreenBloc.isView;
@@ -59,18 +71,26 @@ class _AddSegnalazioniScreenState extends State<AddSegnalazioniScreen> {
               element.id == editingSegnalazioni.idTipologieSegnalazioni);
       pageTitle = "Edit Segnalazioni";
       pageSubTitle = 'Please Fill in details';
-      _nomeController.text = editingSegnalazioni.richiedenteNominativoNome;
-      _cognomeController.text =
-          editingSegnalazioni.richiedenteNominativoCognome;
-      _emailController.text = editingSegnalazioni.richiedenteEmail;
-      _telefonoController.text = editingSegnalazioni.richiedenteTelefono;
-      _indrizzoController.text = editingSegnalazioni.eventoIndirizzo1;
-      _civicoController.text = editingSegnalazioni.eventoCivico1;
-      _comuneController.text = editingSegnalazioni.eventoComune;
-      _ubicazioneController.text = editingSegnalazioni.eventoUbicazione;
+      populateTextField();
       //load card data here
     }
     super.initState();
+  }
+
+  getCoordinate() {
+    print(
+        '${_indrizzoController.text}, ${_civicoController.text}, ${_comuneController.text}, ${_ubicazioneController.text}');
+  }
+
+  populateTextField() {
+    _nomeController.text = editingSegnalazioni.richiedenteNominativoNome;
+    _cognomeController.text = editingSegnalazioni.richiedenteNominativoCognome;
+    _emailController.text = editingSegnalazioni.richiedenteEmail;
+    _telefonoController.text = editingSegnalazioni.richiedenteTelefono;
+    _indrizzoController.text = editingSegnalazioni.eventoIndirizzo1;
+    _civicoController.text = editingSegnalazioni.eventoCivico1;
+    _comuneController.text = editingSegnalazioni.eventoComune;
+    _ubicazioneController.text = editingSegnalazioni.eventoUbicazione;
   }
 
   @override
@@ -526,14 +546,31 @@ class _AddSegnalazioniScreenState extends State<AddSegnalazioniScreen> {
                               width: MediaQuery.of(context).size.width,
                               child: Center(
                                 child: GoogleMap(
+                                  markers: _markers,
 //                  trafficEnabled: true,
                                   myLocationEnabled: false,
                                   myLocationButtonEnabled: false,
                                   mapType: MapType.normal,
+                                  onTap: (LatLng position) {
+                                    setState(() {
+                                      currentPosition = position;
+                                      _markers.add(Marker(
+                                          markerId: MarkerId("1"),
+                                          position: position));
+                                    });
+                                  },
+
+                                  onCameraMove: (CameraPosition position) {
+                                    setState(() {
+                                      currentPosition = position.target;
+                                      _markers.add(Marker(
+                                          markerId: MarkerId("1"),
+                                          position: position.target));
+                                    });
+                                  },
 //                                  markers: Set<Marker>.of(markers.values),
                                   initialCameraPosition: CameraPosition(
-                                      target: LatLng(43.769562, 11.255814),
-                                      zoom: 15.0),
+                                      target: _initialPosition, zoom: 15.0),
                                   onMapCreated:
                                       (GoogleMapController controller) {
                                     if (googleMapBloc.controller == null) {
@@ -562,27 +599,16 @@ class _AddSegnalazioniScreenState extends State<AddSegnalazioniScreen> {
                                                   ThemeColors.fieldNameColor),
                                         ),
                                       ),
-                                      TextField(
-                                        controller: _comuneController,
-                                        readOnly: isView,
-                                        keyboardType:
-                                            TextInputType.emailAddress,
-                                        decoration: InputDecoration(
-                                          border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            borderSide: BorderSide(
-                                              width: 0,
-                                              style: BorderStyle.none,
-                                            ),
-                                          ),
-                                          contentPadding: EdgeInsets.all(12),
-                                          fillColor: ThemeColors.lightBlue5,
-                                          filled: true,
-
-//                                      hintText: "Email",
-                                        ),
-                                      ),
+                                      Text(currentPosition != null
+                                          ? ((currentPosition.latitude * 10000)
+                                                      .round() /
+                                                  10000)
+                                              .toString()
+                                          : ((_initialPosition.latitude * 10000)
+                                                      .round() /
+                                                  10000)
+                                              .toString()
+                                              .toString()),
                                       SizedBox(
                                         height: 20,
                                       ),
@@ -608,26 +634,17 @@ class _AddSegnalazioniScreenState extends State<AddSegnalazioniScreen> {
                                                   ThemeColors.fieldNameColor),
                                         ),
                                       ),
-                                      TextField(
-                                        controller: _ubicazioneController,
-                                        readOnly: isView,
-                                        keyboardType: TextInputType.number,
-                                        decoration: InputDecoration(
-                                          border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            borderSide: BorderSide(
-                                              width: 0,
-                                              style: BorderStyle.none,
-                                            ),
-                                          ),
-                                          contentPadding: EdgeInsets.all(12),
-                                          fillColor: ThemeColors.lightBlue5,
-                                          filled: true,
-
-//                                      hintText: "Email",
-                                        ),
-                                      ),
+                                      Text(currentPosition != null
+                                          ? ((currentPosition.longitude * 10000)
+                                                      .round() /
+                                                  10000)
+                                              .toString()
+                                          : ((_initialPosition.longitude *
+                                                          10000)
+                                                      .round() /
+                                                  10000)
+                                              .toString()
+                                              .toString()),
                                       SizedBox(
                                         height: 20,
                                       ),
