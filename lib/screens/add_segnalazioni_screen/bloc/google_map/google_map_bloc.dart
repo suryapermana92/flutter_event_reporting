@@ -10,7 +10,7 @@ class GoogleMapBloc extends Bloc<GoogleMapEvent, GoogleMapState> {
   GoogleMapState get initialState => InitialGoogleMapState();
   bool isView;
   LatLng _initialPosition = LatLng(43.769562, 11.255814);
-  Completer<GoogleMapController> controller = Completer();
+  Completer<GoogleMapController> controller;
   GoogleMapController mapController;
   bool isMapCreated;
   @override
@@ -18,7 +18,10 @@ class GoogleMapBloc extends Bloc<GoogleMapEvent, GoogleMapState> {
     GoogleMapEvent event,
   ) async* {
     if (event is OnMapCreated) {
-      controller.complete(event.controller);
+      if (controller == null) {
+        controller = new Completer();
+        controller.complete(event.controller);
+      }
       mapController = event.controller;
       isMapCreated = true;
     }

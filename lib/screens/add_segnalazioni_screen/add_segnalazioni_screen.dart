@@ -15,7 +15,8 @@ import 'package:fluttersismic/utils/route_generator.dart';
 import 'package:fluttersismic/widgets/full_button.dart';
 import 'package:fluttersismic/widgets/index.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geocoding/geocoding.dart';
+import 'package:geocoding/geocoding.dart' as geocoding;
+import 'package:location/location.dart';
 
 class AddSegnalazioniScreen extends StatefulWidget {
   AddSegnalazioniScreen({Key key});
@@ -82,12 +83,13 @@ class _AddSegnalazioniScreenState extends State<AddSegnalazioniScreen> {
   }
 
   void _getPlace(position) async {
-    List<Placemark> newPlace = await GeocodingPlatform.instance
+    List<geocoding.Placemark> newPlace = await geocoding
+        .GeocodingPlatform.instance
         .placemarkFromCoordinates(position.latitude, position.longitude,
             localeIdentifier: "en");
 
     // this is all you need
-    Placemark placeMark = newPlace[0];
+    geocoding.Placemark placeMark = newPlace[0];
     _civicoController.text = placeMark.name;
     _comuneController.text = placeMark.locality;
     _indrizzoController.text = placeMark.administrativeArea;
@@ -109,21 +111,58 @@ class _AddSegnalazioniScreenState extends State<AddSegnalazioniScreen> {
   void _getCoordinate() async {
     final query =
         "${_indrizzoController.text}, ${_civicoController.text}, ${_comuneController.text}, ${_ubicazioneController.text}";
-    List<Location> coordinate =
-        await GeocodingPlatform.instance.locationFromAddress(query);
+    List<geocoding.Location> coordinate =
+        await geocoding.GeocodingPlatform.instance.locationFromAddress(query);
 
     // this is all you need
-    Location location = coordinate.first;
+    geocoding.Location location = coordinate.first;
     final cameraPosition = CameraPosition(
         target: LatLng(location.latitude, location.longitude), zoom: 10);
+
     googleMapBloc.mapController
         .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+    setState(() {
+      currentPosition = LatLng(location.latitude, location.longitude);
+      _markers.add(Marker(
+          markerId: MarkerId("1"),
+          position: LatLng(location.latitude, location.longitude)));
+    });
     print('${location.latitude}, ${location.longitude}');
   }
 
-  getCoordinate() {
-    print(
-        '${_indrizzoController.text}, ${_civicoController.text}, ${_comuneController.text}, ${_ubicazioneController.text}');
+  Future getMyPosition() async {
+    Location location = new Location();
+
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
+
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return null;
+      }
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return null;
+      }
+    }
+    final result = await location.getLocation();
+    setState(() {
+      currentPosition = LatLng(result.latitude, result.longitude);
+      _markers.add(Marker(
+          markerId: MarkerId("1"),
+          position: LatLng(result.latitude, result.longitude)));
+    });
+    final cameraPosition = CameraPosition(
+        target: LatLng(result.latitude, result.longitude), zoom: 10);
+    _getPlace(LatLng(result.latitude, result.longitude));
+    googleMapBloc.mapController
+        .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
   }
 
   populateTextField() {
@@ -601,42 +640,57 @@ class _AddSegnalazioniScreenState extends State<AddSegnalazioniScreen> {
                             Container(
                               height: 200,
                               width: MediaQuery.of(context).size.width,
-                              child: Center(
-                                child: GoogleMap(
-                                  markers: _markers,
+                              child: Stack(
+                                children: [
+                                  Center(
+                                    child: GoogleMap(
+                                      markers: _markers,
 //                  trafficEnabled: true,
-                                  myLocationEnabled: false,
-                                  myLocationButtonEnabled: false,
-                                  mapType: MapType.normal,
-                                  onTap: (LatLng position) {
-                                    _getPlace(position);
-                                    setState(() {
-                                      currentPosition = position;
-                                      _markers.add(Marker(
-                                          markerId: MarkerId("1"),
-                                          position: position));
-                                    });
-                                  },
+                                      myLocationEnabled: false,
+                                      myLocationButtonEnabled: true,
+                                      mapType: MapType.normal,
+                                      onTap: (LatLng position) {
+                                        _getPlace(position);
+                                        setState(() {
+                                          currentPosition = position;
+                                          _markers.add(Marker(
+                                              markerId: MarkerId("1"),
+                                              position: position));
+                                        });
+                                      },
 
-                                  onCameraMove: (CameraPosition position) {
+                                      onCameraMove: (CameraPosition position) {
 //                                    setState(() {
 //                                      currentPosition = position.target;
 //                                      _markers.add(Marker(
 //                                          markerId: MarkerId("1"),
 //                                          position: position.target));
 //                                    });
-                                  },
+                                      },
 //                                  markers: Set<Marker>.of(markers.values),
-                                  initialCameraPosition: CameraPosition(
-                                      target: _initialPosition, zoom: 15.0),
-                                  onMapCreated:
-                                      (GoogleMapController controller) {
-                                    if (googleMapBloc.mapController == null) {
-                                      googleMapBloc.add(
-                                          OnMapCreated(controller: controller));
-                                    }
-                                  },
-                                ),
+                                      initialCameraPosition: CameraPosition(
+                                          target: _initialPosition, zoom: 15.0),
+                                      onMapCreated:
+                                          (GoogleMapController controller) {
+                                        googleMapBloc.add(OnMapCreated(
+                                            controller: controller));
+                                      },
+                                    ),
+                                  ),
+                                  Positioned(
+                                      top: 10,
+                                      right: -5,
+                                      child: RawMaterialButton(
+                                        shape: CircleBorder(),
+                                        onPressed: () {
+                                          getMyPosition();
+                                        },
+                                        elevation: 2,
+                                        fillColor: Colors.white,
+                                        padding: EdgeInsets.all(15),
+                                        child: Icon(Icons.my_location),
+                                      )),
+                                ],
                               ),
                             ),
                             Row(
