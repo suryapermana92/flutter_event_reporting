@@ -3,6 +3,8 @@
     <!-- Flutter needs it to communicate with the running application
          to allow setting breakpoints, to provide hot reload, etc.
     -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application android:name="io.flutter.app.FlutterApplication"
         android:label="fluttersismic"
         android:icon="@mipmap/ic_launcher">
@@ -15,7 +17,7 @@
             <!--            GOOGLE MAP API KEY-->
             <meta-data
                 android:name="com.google.android.geo.API_KEY"
-                android:value="XXXXXX"
+                android:value="AIzaSyA-pfIULt4YtXBVvm_cSxFUEYyPDR9kofY"
                 />
         </activity>
     </application>

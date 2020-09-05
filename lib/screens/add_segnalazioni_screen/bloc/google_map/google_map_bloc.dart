@@ -22,6 +22,7 @@ class GoogleMapBloc extends Bloc<GoogleMapEvent, GoogleMapState> {
       mapController = event.controller;
       isMapCreated = true;
     }
+    yield (MapLoaded());
     // TODO: Add Logic
   }
 }

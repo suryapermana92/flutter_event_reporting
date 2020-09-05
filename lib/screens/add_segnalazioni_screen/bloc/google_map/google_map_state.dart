@@ -4,3 +4,5 @@ import 'package:meta/meta.dart';
 abstract class GoogleMapState {}
 
 class InitialGoogleMapState extends GoogleMapState {}
+
+class MapLoaded extends GoogleMapState {}

@@ -15,6 +15,7 @@ import 'package:fluttersismic/utils/route_generator.dart';
 import 'package:fluttersismic/widgets/full_button.dart';
 import 'package:fluttersismic/widgets/index.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geocoding/geocoding.dart';
 
 class AddSegnalazioniScreen extends StatefulWidget {
   AddSegnalazioniScreen({Key key});
@@ -47,9 +48,11 @@ class _AddSegnalazioniScreenState extends State<AddSegnalazioniScreen> {
   LatLng currentPosition;
   final Set<Marker> _markers = {};
 
+  var geocodeTimer;
+  String addressString;
+
   @override
   void initState() {
-    _indrizzoController.addListener(getCoordinate());
     addSegnalazioniBloc = BlocProvider.of<AddSegnalazioniBloc>(context);
     _initialPosition = LatLng(43.769562, 11.255814);
     _markers.add(
@@ -74,7 +77,48 @@ class _AddSegnalazioniScreenState extends State<AddSegnalazioniScreen> {
       populateTextField();
       //load card data here
     }
+
     super.initState();
+  }
+
+  void _getPlace(position) async {
+    List<Placemark> newPlace = await GeocodingPlatform.instance
+        .placemarkFromCoordinates(position.latitude, position.longitude,
+            localeIdentifier: "en");
+
+    // this is all you need
+    Placemark placeMark = newPlace[0];
+    _civicoController.text = placeMark.name;
+    _comuneController.text = placeMark.locality;
+    _indrizzoController.text = placeMark.administrativeArea;
+    _ubicazioneController.text = placeMark.postalCode;
+  }
+
+  void _getCoordinateThrottler() {
+    if (geocodeTimer != null) {
+      geocodeTimer.cancel();
+    }
+    if (_indrizzoController.text.length > 0 &&
+        _civicoController.text.length > 0 &&
+        _comuneController.text.length > 0 &&
+        _ubicazioneController.text.length > 0) {
+      geocodeTimer = Timer(Duration(seconds: 1), () => _getCoordinate());
+    }
+  }
+
+  void _getCoordinate() async {
+    final query =
+        "${_indrizzoController.text}, ${_civicoController.text}, ${_comuneController.text}, ${_ubicazioneController.text}";
+    List<Location> coordinate =
+        await GeocodingPlatform.instance.locationFromAddress(query);
+
+    // this is all you need
+    Location location = coordinate.first;
+    final cameraPosition = CameraPosition(
+        target: LatLng(location.latitude, location.longitude), zoom: 10);
+    googleMapBloc.mapController
+        .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+    print('${location.latitude}, ${location.longitude}');
   }
 
   getCoordinate() {
@@ -395,6 +439,9 @@ class _AddSegnalazioniScreenState extends State<AddSegnalazioniScreen> {
 
 //                                      hintText: "Email",
                                         ),
+                                        onChanged: (text) {
+                                          _getCoordinateThrottler();
+                                        },
                                       ),
                                       SizedBox(
                                         height: 20,
@@ -440,6 +487,9 @@ class _AddSegnalazioniScreenState extends State<AddSegnalazioniScreen> {
 
 //                                      hintText: "Email",
                                         ),
+                                        onChanged: (text) {
+                                          _getCoordinateThrottler();
+                                        },
                                       ),
                                       SizedBox(
                                         height: 20,
@@ -487,6 +537,9 @@ class _AddSegnalazioniScreenState extends State<AddSegnalazioniScreen> {
 
 //                                      hintText: "Email",
                                         ),
+                                        onChanged: (text) {
+                                          _getCoordinateThrottler();
+                                        },
                                       ),
                                       SizedBox(
                                         height: 20,
@@ -532,6 +585,9 @@ class _AddSegnalazioniScreenState extends State<AddSegnalazioniScreen> {
 
 //                                      hintText: "Email",
                                         ),
+                                        onChanged: (text) {
+                                          _getCoordinateThrottler();
+                                        },
                                       ),
                                       SizedBox(
                                         height: 20,
@@ -541,6 +597,7 @@ class _AddSegnalazioniScreenState extends State<AddSegnalazioniScreen> {
                                 )
                               ],
                             ),
+                            Text(addressString ?? ""),
                             Container(
                               height: 200,
                               width: MediaQuery.of(context).size.width,
@@ -552,6 +609,7 @@ class _AddSegnalazioniScreenState extends State<AddSegnalazioniScreen> {
                                   myLocationButtonEnabled: false,
                                   mapType: MapType.normal,
                                   onTap: (LatLng position) {
+                                    _getPlace(position);
                                     setState(() {
                                       currentPosition = position;
                                       _markers.add(Marker(
@@ -561,19 +619,19 @@ class _AddSegnalazioniScreenState extends State<AddSegnalazioniScreen> {
                                   },
 
                                   onCameraMove: (CameraPosition position) {
-                                    setState(() {
-                                      currentPosition = position.target;
-                                      _markers.add(Marker(
-                                          markerId: MarkerId("1"),
-                                          position: position.target));
-                                    });
+//                                    setState(() {
+//                                      currentPosition = position.target;
+//                                      _markers.add(Marker(
+//                                          markerId: MarkerId("1"),
+//                                          position: position.target));
+//                                    });
                                   },
 //                                  markers: Set<Marker>.of(markers.values),
                                   initialCameraPosition: CameraPosition(
                                       target: _initialPosition, zoom: 15.0),
                                   onMapCreated:
                                       (GoogleMapController controller) {
-                                    if (googleMapBloc.controller == null) {
+                                    if (googleMapBloc.mapController == null) {
                                       googleMapBloc.add(
                                           OnMapCreated(controller: controller));
                                     }
